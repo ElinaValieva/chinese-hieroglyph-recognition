@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 @Log4j
 public class ImageUtil {
 
-    private static final Integer REQUIRED_SIZE = 100;
+    private static final Integer REQUIRED_SIZE = 50;
 
     private ImageUtil() {
     }
