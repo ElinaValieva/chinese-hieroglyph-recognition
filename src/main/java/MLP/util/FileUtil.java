@@ -21,8 +21,14 @@ public class FileUtil {
         return file.getAbsolutePath();
     }
 
-    public static File createFile(String fileName) throws IOException {
+    public static File createFile(String fileName) {
         Path path = Paths.get(System.getProperty(USER_DIR) + fileName);
-        return Files.createFile(path).toFile();
+        File file = null;
+        try {
+            file = Files.createFile(path).toFile();
+        } catch (IOException e) {
+            log.error("", e);
+        }
+        return file;
     }
 }
