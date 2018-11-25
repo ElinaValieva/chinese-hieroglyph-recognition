@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @Log4j
@@ -47,9 +49,39 @@ public class ImageUtil {
         return data;
     }
 
-    public static void scale(RImage rImage) {
+    private static List<Integer> createPixelsInput(String path, int sizeWidth, int sizeHeight) {
+        File imgLoc = new File(path);
+        List<Integer> data = new ArrayList<>();
+        try {
+            BufferedImage img = ImageIO.read(imgLoc);
+            BufferedImage bi = new BufferedImage(
+                    sizeWidth,
+                    sizeHeight,
+                    BufferedImage.TYPE_BYTE_GRAY);
+            Graphics2D g = bi.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            g.dispose();
+
+            IntStream.range(0, sizeWidth)
+                    .forEach(i ->
+                            IntStream.range(0, sizeHeight)
+                                    .forEach(j -> {
+                                        int[] d = new int[3];
+                                        bi.getRaster().getPixel(i, j, d);
+                                        if (d[0] > 128)
+                                            data.add(0);
+                                        else
+                                            data.add(1);
+                                    }));
+        } catch (IOException ex) {
+            log.error(path + " not loaded");
+        }
+        return data;
+    }
+
+    private static BufferedImage scale(RImage rImage) {
         BufferedImage bufferedImage = convertToImage(rImage);
-        resize(bufferedImage);
+        return resize(bufferedImage);
     }
 
     private static BufferedImage resize(BufferedImage bufferedImage) {
@@ -74,5 +106,22 @@ public class ImageUtil {
         );
 
         return bufferedImage;
+    }
+
+    public static void saveImage(RImage rImage, String fileName) {
+        BufferedImage bufferedImage = scale(rImage);
+        try {
+            ImageIO.write(bufferedImage, "jpg", FileUtil.createFile(fileName));
+        } catch (IOException e) {
+            log.error("", e);
+        }
+    }
+
+    public static RImage createRImage(String path, int x, int y) {
+        RImage rImage = new RImage();
+        rImage.setSizeX(x);
+        rImage.setSizeY(y);
+        rImage.setPixels(createPixelsInput(path, x, y));
+        return rImage;
     }
 }
