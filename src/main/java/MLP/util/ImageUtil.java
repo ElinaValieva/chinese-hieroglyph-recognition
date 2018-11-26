@@ -2,6 +2,7 @@ package MLP.util;
 
 import MLP.models.RImage;
 import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -85,7 +87,7 @@ public class ImageUtil {
     }
 
     private static BufferedImage resize(BufferedImage bufferedImage) {
-        Image tmp = bufferedImage.getScaledInstance(REQUIRED_SIZE, REQUIRED_SIZE, Image.SCALE_SMOOTH);
+        Image tmp = bufferedImage.getScaledInstance(REQUIRED_SIZE, REQUIRED_SIZE, Image.SCALE_DEFAULT);
         BufferedImage resizedBufferedImage = new BufferedImage(REQUIRED_SIZE, REQUIRED_SIZE, BufferedImage.TYPE_BYTE_BINARY);
         Graphics2D g2d = resizedBufferedImage.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
@@ -119,9 +121,50 @@ public class ImageUtil {
 
     public static RImage createRImage(String path, int x, int y) {
         RImage rImage = new RImage();
-        rImage.setSizeX(x);
-        rImage.setSizeY(y);
-        rImage.setPixels(createPixelsInput(path, x, y));
+        List<Integer> pixels = createPixelsInput(path, x, y);
+        if (x != y)
+            pixels = updatePicToX(pixels, x, y);
+        int size = (x > y) ? x : y;
+        rImage.setSizeX(size);
+        rImage.setSizeY(size);
+        rImage.setPixels(pixels);
         return rImage;
+    }
+
+    public static void resize(RImage rImage) throws IOException {
+        BufferedImage bufferedImage = convertToImage(rImage);
+        File file = FileUtil.createFile("/pic222.jpg");
+        ImageIO.write(bufferedImage, "jpg", file);
+        BufferedImage bufferedImage2 = Thumbnails.of(file)
+                .size(REQUIRED_SIZE, REQUIRED_SIZE)
+                .outputFormat("JPEG")
+                .asBufferedImage();
+        ImageIO.write(bufferedImage2, "jpg", new File("C:/Users/Elina/Desktop/pic.jpg"));
+    }
+
+    private static List<Integer> updatePicToX(List<Integer> pixels, int x, int y) {
+        System.out.println(pixels.size() + " " + x + " " + y);
+        int size = (x > y) ? x : y;
+        int sizeMin = (x > y) ? y : x;
+        int[][] pix = new int[size][size];
+        List<Integer> outPix = new ArrayList<>();
+        IntStream.range(0, size)
+                .forEach(i -> Arrays.fill(pix[i], 0));
+        IntStream.range(0, y).forEach(i ->
+                IntStream.range(0, x).forEach(j ->
+                        pix[i][j] = pixels.get(i * sizeMin + j)
+                ));
+        for (int i = 0; i < pix.length; i++) {
+            for (int j = 0; j < pix[i].length; j++) {
+                System.out.print(pix[i][j] + " ");
+            }
+            System.out.println();
+        }
+        IntStream.range(0, size).forEach(i ->
+                IntStream.range(0, size).forEach(j ->
+                        outPix.add(pix[i][j])
+                ));
+
+        return outPix;
     }
 }
