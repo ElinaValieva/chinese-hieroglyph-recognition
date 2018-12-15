@@ -1,18 +1,21 @@
-package MLP;
+package MLP.services.impl;
 
 import MLP.funtionsActivation.FunctionActivation;
 import MLP.models.Layer;
+import MLP.services.IMultiLayerPerceptronService;
+import org.springframework.stereotype.Service;
 
 import java.util.stream.IntStream;
 
-public class MultiLayerPerceptron {
+@Service
+public class MultiLayerPerceptronService implements IMultiLayerPerceptronService {
 
     protected double fLearningRate;
     protected Layer[] fLayers;
     protected FunctionActivation fFunctionActivation;
 
-
-    public MultiLayerPerceptron(int[] layers, double learningRate, FunctionActivation fFunctionActivation) {
+    @Override
+    public void prepareLayers(int[] layers, double learningRate, FunctionActivation fFunctionActivation) {
         fLearningRate = learningRate;
         this.fFunctionActivation = fFunctionActivation;
 
@@ -28,6 +31,7 @@ public class MultiLayerPerceptron {
     }
 
 
+    @Override
     public double[] execute(double[] input) {
 
         final double[] newValue = new double[1];
@@ -64,6 +68,7 @@ public class MultiLayerPerceptron {
     }
 
 
+    @Override
     public double backPropagate(double[] input, double[] output) {
         double[] newOutput = execute(input);
         final double[] error = new double[1];
