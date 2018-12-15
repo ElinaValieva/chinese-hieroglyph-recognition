@@ -32,9 +32,9 @@ public class TransformationService {
         rImageList.forEach(rImageItem -> {
             RImage newRImage = fileService.resizeImage(rImageItem);
             BufferedImage bufferedImage = fileService.convertToImage(newRImage);
-            String fileName = "C:/Users/Elina/Desktop/file" + index[0] + ".jpg";
+            String fileName = "C:/Users/Elina/Desktop/file" + index[0] + ".png";
             try {
-                ImageIO.write(bufferedImage, "jpg", new File(fileName));
+                ImageIO.write(bufferedImage, "png", new File(fileName));
             } catch (IOException e) {
                 log.error("", e);
             }

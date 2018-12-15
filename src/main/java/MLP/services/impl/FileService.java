@@ -81,7 +81,7 @@ public class FileService implements IFileService {
         IntStream.range(0, sizeX).forEach(x ->
                 IntStream.range(0, sizeY).forEach(y -> {
                     int rgb = rImage.getPixels().get(x * sizeX + y) == 1 ? Color.BLACK.getRGB() : Color.WHITE.getRGB();
-                    bufferedImage.setRGB(x, y, rgb);
+                    bufferedImage.setRGB(y, x, rgb);
                 })
         );
 
@@ -99,6 +99,7 @@ public class FileService implements IFileService {
         rImage.setPixels(pixels);
         return rImage;
     }
+
 
     public List<Integer> createPixelsInput(String path, int sizeWidth, int sizeHeight) {
         File imgLoc = new File(path);

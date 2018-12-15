@@ -87,10 +87,11 @@ public class SegmentationService implements ISegmentationService {
                                 p[0] = p[0] + sizeY;
                             });
                 });
-        rImage.setSizeX(sizeY);
-        rImage.setSizeY(sizeX);
-        rImage.setPixels(pixels);
-        return verticalSegmentation(rImage).stream()
+        RImage newRImage = new RImage();
+        newRImage.setSizeX(sizeY);
+        newRImage.setSizeY(sizeX);
+        newRImage.setPixels(pixels);
+        return verticalSegmentation(newRImage).stream()
                 .map(RImage::changeSize)
                 .collect(Collectors.toList());
     }
