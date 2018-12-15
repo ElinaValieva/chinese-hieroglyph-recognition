@@ -17,11 +17,9 @@ import java.util.stream.IntStream;
 @Log4j
 public class SegmentationService implements ISegmentationService {
 
-    private static List<RImage> rImagesResult;
-
     @Override
     public List<RImage> segmentation(RImage rImageInput) {
-        rImagesResult = new ArrayList<>();
+        List<RImage> rImagesResult = new ArrayList<>();
         List<RImage> rImages = verticalSegmentation(rImageInput);
         rImages.forEach(rImage ->
                 rImagesResult.addAll(horizontalSegmentation(rImage)));

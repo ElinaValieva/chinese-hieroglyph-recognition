@@ -58,12 +58,7 @@ public class FileService implements IFileService {
                 IntStream.range(0, rImage.getSizeX()).forEach(j ->
                         pix[i][j] = rImage.getPixels().get(i * sizeMin + j)
                 ));
-        for (int i = 0; i < pix.length; i++) {
-            for (int j = 0; j < pix[i].length; j++) {
-                System.out.print(pix[i][j] + " ");
-            }
-            System.out.println();
-        }
+
         IntStream.range(0, size).forEach(i ->
                 IntStream.range(0, size).forEach(j ->
                         outPix.add(pix[i][j])
