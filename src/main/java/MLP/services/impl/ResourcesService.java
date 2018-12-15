@@ -1,8 +1,7 @@
 package MLP.services.impl;
 
 import MLP.models.RImage;
-import MLP.services.IResourcesService;
-import ch.qos.logback.core.util.FileUtil;
+import MLP.services.api.IResourcesService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,9 @@ public class ResourcesService implements IResourcesService {
 
     @Override
     public String getFilesPath(String fileName) {
-        File file = new File(FileUtil.class.getClassLoader().getResource(fileName).getFile());
+        File file = new File(ResourcesService.class.getClassLoader().getResource(fileName).getFile());
         return file.getAbsolutePath();
+
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ResourcesService implements IResourcesService {
 
     @Override
     public RImage resizeImage(RImage rImage) {
-        int size = (rImage.getSizeX() > rImage.getSizeY()) ? rImage.getSizeX() : rImage.getSizeY();
+        int size = 50;
         int sizeMin = (rImage.getSizeX() > rImage.getSizeY()) ? rImage.getSizeY() : rImage.getSizeX();
         int sizeM = (rImage.getSizeY() > rImage.getSizeX()) ? sizeMin : size;
         int[][] pix = new int[size][size];

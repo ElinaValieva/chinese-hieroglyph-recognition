@@ -2,7 +2,7 @@ package MLP.services.impl;
 
 import MLP.funtionsActivation.FunctionActivation;
 import MLP.models.Layer;
-import MLP.services.IMultiLayerPerceptronService;
+import MLP.services.api.IMultiLayerPerceptronService;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.IntStream;
@@ -32,12 +32,9 @@ public class MultiLayerPerceptronService implements IMultiLayerPerceptronService
 
 
     @Override
-    public double[] execute(double[] input) {
-
+    public Double[] execute(Double[] input) {
         final double[] newValue = new double[1];
-
-        double[] output = new double[fLayers[fLayers.length - 1].length];
-
+        Double[] output = new Double[fLayers[fLayers.length - 1].length];
         IntStream.range(0, fLayers[0].length)
                 .forEach(i ->
                         fLayers[0].neurons[i].value = input[i]
@@ -69,8 +66,8 @@ public class MultiLayerPerceptronService implements IMultiLayerPerceptronService
 
 
     @Override
-    public double backPropagate(double[] input, double[] output) {
-        double[] newOutput = execute(input);
+    public double backPropagate(Double[] input, Double[] output) {
+        Double[] newOutput = execute(input);
         final double[] error = new double[1];
 
         IntStream.range(0, fLayers[fLayers.length - 1].length)

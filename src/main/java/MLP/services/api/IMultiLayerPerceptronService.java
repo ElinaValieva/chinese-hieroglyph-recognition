@@ -1,4 +1,4 @@
-package MLP.services;
+package MLP.services.api;
 
 import MLP.funtionsActivation.FunctionActivation;
 
@@ -9,7 +9,7 @@ public interface IMultiLayerPerceptronService {
 
     void prepareLayers(int[] layers, double learningRate, FunctionActivation fFunctionActivation);
 
-    double[] execute(double[] input);
+    Double[] execute(Double[] input);
 
-    double backPropagate(double[] input, double[] output);
+    double backPropagate(Double[] input, Double[] output);
 }

@@ -1,7 +1,7 @@
 package MLP.services.impl;
 
 import MLP.models.RImage;
-import MLP.services.ISegmentationService;
+import MLP.services.api.ISegmentationService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+
 
 /**
  * author: ElinaValieva on 15.12.2018

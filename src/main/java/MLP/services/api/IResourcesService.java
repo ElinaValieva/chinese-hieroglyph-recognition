@@ -1,4 +1,4 @@
-package MLP.services;
+package MLP.services.api;
 
 import MLP.models.RImage;
 
