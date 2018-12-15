@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * author: ElinaValieva on 15.12.2018
  */
-public interface IFileService {
+public interface IResourcesService {
 
     String getFilesPath(String fileName);
 

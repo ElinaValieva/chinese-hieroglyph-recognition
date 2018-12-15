@@ -1,7 +1,7 @@
 package MLP.services.impl;
 
 import MLP.models.RImage;
-import MLP.services.IFileService;
+import MLP.services.IResourcesService;
 import ch.qos.logback.core.util.FileUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
  */
 @Service
 @Log4j
-public class FileService implements IFileService {
+public class ResourcesService implements IResourcesService {
 
     private static final String USER_DIR = "user.dir";
 
@@ -61,7 +61,12 @@ public class FileService implements IFileService {
                         pix[i][j] = rImage.getPixels().get(i * sizeM + j)
                 ));
 
-        
+        for (int i = 0; i < pix.length; i++) {
+            for (int j = 0; j < pix[i].length; j++) {
+                System.out.print(pix[i][j] + " ");
+            }
+            System.out.println();
+        }
 
         IntStream.range(0, size).forEach(i ->
                 IntStream.range(0, size).forEach(j ->
