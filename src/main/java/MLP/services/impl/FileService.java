@@ -50,14 +50,18 @@ public class FileService implements IFileService {
     public RImage resizeImage(RImage rImage) {
         int size = (rImage.getSizeX() > rImage.getSizeY()) ? rImage.getSizeX() : rImage.getSizeY();
         int sizeMin = (rImage.getSizeX() > rImage.getSizeY()) ? rImage.getSizeY() : rImage.getSizeX();
+        int sizeM = (rImage.getSizeY() > rImage.getSizeX()) ? sizeMin : size;
         int[][] pix = new int[size][size];
         List<Integer> outPix = new ArrayList<>();
         IntStream.range(0, size)
                 .forEach(i -> Arrays.fill(pix[i], 0));
+
         IntStream.range(0, rImage.getSizeY()).forEach(i ->
                 IntStream.range(0, rImage.getSizeX()).forEach(j ->
-                        pix[i][j] = rImage.getPixels().get(i * sizeMin + j)
+                        pix[i][j] = rImage.getPixels().get(i * sizeM + j)
                 ));
+
+        
 
         IntStream.range(0, size).forEach(i ->
                 IntStream.range(0, size).forEach(j ->

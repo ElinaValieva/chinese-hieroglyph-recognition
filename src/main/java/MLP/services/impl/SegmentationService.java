@@ -20,13 +20,15 @@ public class SegmentationService implements ISegmentationService {
     @Override
     public List<RImage> segmentation(RImage rImageInput) {
         List<RImage> rImagesResult = new ArrayList<>();
-        List<RImage> rImages = verticalSegmentation(rImageInput);
-        rImages.forEach(rImage ->
-                rImagesResult.addAll(horizontalSegmentation(rImage)));
+        List<RImage> rImagesVertical = verticalSegmentation(rImageInput);
+        List<RImage> rImagesHorizontal = new ArrayList<>();
+        rImagesVertical.forEach(rImage ->
+                rImagesHorizontal.addAll(horizontalSegmentation(rImage)));
 
-        if (rImagesResult.size() != rImages.size())
+        if (rImagesHorizontal.size() != rImagesVertical.size())
             rImagesResult.forEach(rImage -> segmentation(rImage));
 
+        rImagesResult.addAll(rImagesHorizontal);
         return rImagesResult;
     }
 
