@@ -1,11 +1,12 @@
 package MLP.services;
 
 import MLP.funtionsActivation.SigmoidActivation;
+import MLP.models.ImageSegmentation;
 import MLP.models.RImage;
-import MLP.services.api.IFileManagerService;
-import MLP.services.api.IMultiLayerPerceptronService;
-import MLP.services.api.IResourcesService;
-import MLP.services.api.ISegmentationService;
+import MLP.services.fileManagerService.IFileManagerService;
+import MLP.services.multiLayerPerseptronService.IMultiLayerPerceptronService;
+import MLP.services.resourcesService.IResourcesService;
+import MLP.services.segmentationService.ISegmentationService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -36,9 +38,11 @@ public class TransformationService {
     @Autowired
     private IMultiLayerPerceptronService multiLayerPerceptronService;
 
-    private static final Integer ITERATIONS = 100;
+    private List<ImageSegmentation> imageSegmentations;
 
-    private static final Integer CNT_PATTERS = 7;
+    private static final Integer ITERATIONS = 1000;
+
+    private static final Integer CNT_PATTERS = 10;
 
     private static final Integer SIZE = 50;
 
@@ -47,20 +51,24 @@ public class TransformationService {
         fileManagerService.deleteAll();
         fileManagerService.saveFile(multipartFile);
         String path = fileManagerService.getFileDirectory(multipartFile.getOriginalFilename()).toString();
-        RImage rImage = resourcesService.createRImage(path, SIZE, SIZE);
+        RImage rImage = resourcesService.createRImage(path, 153, 50, false);
         List<RImage> rImageList = segmentationService.segmentation(rImage);
         training();
+        imageSegmentations = new ArrayList<>();
         rImageList.forEach(rImageItem -> {
             try {
                 RImage newRImage = resourcesService.resizeImage(rImageItem);
                 BufferedImage bufferedImage = resourcesService.convertToImage(newRImage);
                 String fileName = rImageList.indexOf(rImageItem) + ".png";
-                testing(newRImage);
+                ImageSegmentation imageSegmentation = new ImageSegmentation();
+                imageSegmentation.setPathImage(fileName);
+                testing(newRImage, imageSegmentation);
                 fileManagerService.saveFile(bufferedImage, fileName);
             } catch (IOException e) {
                 log.error("", e);
             }
         });
+        imageSegmentations.forEach(System.out::println);
     }
 
 
@@ -70,8 +78,8 @@ public class TransformationService {
         multiLayerPerceptronService.prepareLayers(layers, 0.6, new SigmoidActivation());
         IntStream.range(0, ITERATIONS).forEach(i ->
                 IntStream.range(1, CNT_PATTERS).forEach(j -> {
-                            RImage rImagePattern = resourcesService.createRImage(resourcesService.getFilesPath("patters_Hieroglyph/" + j + ".png"), 50, 50);
-                            Double[] inputs = getList(rImagePattern.getPixels());
+                            RImage rImagePattern = resourcesService.createRImage(resourcesService.getFilesPath("patters_Hieroglyph/" + j + ".png"), 50, 50, true);
+                            Double[] inputs = getList(rImagePattern);
 
                             if (inputs == null)
                                 System.out.println("Cant find " + j);
@@ -87,8 +95,8 @@ public class TransformationService {
         );
     }
 
-    public void testing(RImage rImage) {
-        Double[] inputs = getList(rImage.getPixels());
+    public void testing(RImage rImage, ImageSegmentation imageSegmentation) {
+        Double[] inputs = getList(rImage);
         Double[] output = multiLayerPerceptronService.execute(inputs);
         final int[] max = {0};
         IntStream.range(0, CNT_PATTERS).forEach(i -> {
@@ -96,12 +104,19 @@ public class TransformationService {
                 max[0] = i;
         });
         System.out.println("Il valore massimo e' " + output[max[0]] + " pattern " + (max[0] + 1));
+        imageSegmentation.setCodeResult(max[0] + 1);
+        imageSegmentation.setError(output[max[0]]);
+        imageSegmentations.add(imageSegmentation);
     }
 
-    private Double[] getList(List<Integer> list) {
-        Double[] result = new Double[list.size()];
-        IntStream.range(0, list.size()).forEach(i ->
-                result[i] = Double.valueOf(list.get(i))
+    private Double[] getList(RImage rImage) {
+        Double[] result = new Double[rImage.getSizeY() * rImage.getSizeX()];
+        final int[] count = {0};
+        IntStream.range(0, rImage.getPixels().length).forEach(i ->
+                IntStream.range(0, rImage.getPixels()[i].length).forEach(j -> {
+                    result[count[0]] = Double.valueOf(rImage.getPixels()[i][j]);
+                    count[0]++;
+                })
         );
         return result;
     }
