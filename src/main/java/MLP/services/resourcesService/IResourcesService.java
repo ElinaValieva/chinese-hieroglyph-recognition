@@ -1,10 +1,9 @@
-package MLP.services.api;
+package MLP.services.resourcesService;
 
 import MLP.models.RImage;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
 
 /**
  * author: ElinaValieva on 15.12.2018
@@ -19,7 +18,7 @@ public interface IResourcesService {
 
     BufferedImage convertToImage(RImage rImage);
 
-    RImage createRImage(String path, int x, int y);
+    RImage createRImage(String path, int x, int y, boolean flag);
 
-    List<Integer> createPixelsInput(String path, int sizeWidth, int sizeHeight);
+    int[][] createPixelsInput(String path, int sizeWidth, int sizeHeight);
 }
