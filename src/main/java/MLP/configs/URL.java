@@ -11,4 +11,6 @@ public class URL {
     public static final String URL_VIEW = "/";
     public static final String VIEW = "start";
     public static final String URL_CONVERT = "/convert";
+    public static final String URL_UPLOAD = "/upload";
+    public static final String FILE = "file";
 }
