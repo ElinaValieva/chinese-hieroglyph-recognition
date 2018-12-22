@@ -9,6 +9,7 @@ import MLP.services.api.ISegmentationService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -42,8 +43,11 @@ public class TransformationService {
     private static final Integer SIZE = 50;
 
 
-    public void transform() {
-        RImage rImage = resourcesService.createRImage(resourcesService.getFilesPath("tests_Hieroglyph/8.png"), SIZE, SIZE);
+    public void transform(MultipartFile multipartFile) throws IOException {
+        fileManagerService.deleteAll();
+        fileManagerService.saveFile(multipartFile);
+        String path = fileManagerService.getFileDirectory(multipartFile.getOriginalFilename()).toString();
+        RImage rImage = resourcesService.createRImage(path, SIZE, SIZE);
         List<RImage> rImageList = segmentationService.segmentation(rImage);
         training();
         rImageList.forEach(rImageItem -> {
