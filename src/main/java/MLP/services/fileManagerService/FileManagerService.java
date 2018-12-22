@@ -1,7 +1,6 @@
-package MLP.services.impl;
+package MLP.services.fileManagerService;
 
 import MLP.configs.StorageConfig;
-import MLP.services.api.IFileManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

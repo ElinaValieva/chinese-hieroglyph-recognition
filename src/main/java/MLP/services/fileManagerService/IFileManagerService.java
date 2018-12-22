@@ -1,4 +1,4 @@
-package MLP.services.api;
+package MLP.services.fileManagerService;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
