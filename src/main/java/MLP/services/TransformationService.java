@@ -47,11 +47,11 @@ public class TransformationService {
     private static final Integer SIZE = 50;
 
 
-    public void transform(MultipartFile multipartFile) throws IOException {
+    public List<ImageSegmentation> transform(MultipartFile multipartFile) throws IOException {
         fileManagerService.deleteAll();
         fileManagerService.saveFile(multipartFile);
         String path = fileManagerService.getFileDirectory(multipartFile.getOriginalFilename()).toString();
-        RImage rImage = resourcesService.createRImage(path, 153, 50, false);
+        RImage rImage = resourcesService.createRImage(path, false);
         List<RImage> rImageList = segmentationService.segmentation(rImage);
         training();
         imageSegmentations = new ArrayList<>();
@@ -68,7 +68,7 @@ public class TransformationService {
                 log.error("", e);
             }
         });
-        imageSegmentations.forEach(System.out::println);
+        return imageSegmentations;
     }
 
 
@@ -78,18 +78,18 @@ public class TransformationService {
         multiLayerPerceptronService.prepareLayers(layers, 0.6, new SigmoidActivation());
         IntStream.range(0, ITERATIONS).forEach(i ->
                 IntStream.range(1, CNT_PATTERS).forEach(j -> {
-                            RImage rImagePattern = resourcesService.createRImage(resourcesService.getFilesPath("patters_Hieroglyph/" + j + ".png"), 50, 50, true);
+                            RImage rImagePattern = resourcesService.createRImage(resourcesService.getFilesPath("patters_Hieroglyph/" + j + ".png"), true);
                             Double[] inputs = getList(rImagePattern);
 
                             if (inputs == null)
-                                System.out.println("Cant find " + j);
+                                log.info("Cant find " + j);
 
                             Double[] output = new Double[CNT_PATTERS];
                             for (int l = 0; l < CNT_PATTERS; l++)
                                 output[l] = 0.0;
                             output[j - 1] = 1.0;
                             error[0] = multiLayerPerceptronService.backPropagate(inputs, output);
-                            System.out.println("Error is " + error[0] + " (" + i + " " + " " + j + " )");
+                            log.info(String.format("Error: %s, iteration: %s, image pattern: %s", error[0], i, j));
                         }
                 )
         );
@@ -103,7 +103,7 @@ public class TransformationService {
             if (output[i] > output[max[0]])
                 max[0] = i;
         });
-        System.out.println("Il valore massimo e' " + output[max[0]] + " pattern " + (max[0] + 1));
+        log.info(String.format("Result of testing  error: %s, pattern: %s", output[max[0]], (max[0] + 1)));
         imageSegmentation.setCodeResult(max[0] + 1);
         imageSegmentation.setError(output[max[0]]);
         imageSegmentations.add(imageSegmentation);
