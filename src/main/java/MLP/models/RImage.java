@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,7 +13,7 @@ public class RImage implements Cloneable {
 
     private int sizeX;
     private int sizeY;
-    private List<Integer> pixels;
+    private int[][] pixels;
 
     public RImage clone() throws CloneNotSupportedException {
         return (RImage) super.clone();
