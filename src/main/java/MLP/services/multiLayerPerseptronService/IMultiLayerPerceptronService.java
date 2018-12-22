@@ -1,4 +1,4 @@
-package MLP.services.api;
+package MLP.services.multiLayerPerseptronService;
 
 import MLP.funtionsActivation.FunctionActivation;
 
