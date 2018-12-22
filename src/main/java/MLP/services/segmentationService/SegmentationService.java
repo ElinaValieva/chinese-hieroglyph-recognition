@@ -21,21 +21,45 @@ public class SegmentationService implements ISegmentationService {
     @Override
     public List<RImage> segmentation(RImage rImageInput) {
         rImagesResult = new ArrayList<>();
-        for (int i = 0; i < rImageInput.getPixels().length; i++) {
-            for (int j = 0; j < rImageInput.getPixels()[i].length; j++) {
-                System.out.print(rImageInput.getPixels()[i][j] + " ");
-            }
-            System.out.println();
-        }
-        List<RImage> rImagesVertical = horizontalSegmentation(rImageInput);
-        rImagesResult.addAll(rImagesVertical);
+        if (rImageInput.getSizeX() < rImageInput.getSizeY())
+            rImagesResult = verticalSegmentation(rImageInput);
+        else
+            rImagesResult = horizontalSegmentation(rImageInput);
         optimize();
         return rImagesResult;
     }
 
     @Override
     public List<RImage> verticalSegmentation(RImage rImage) {
-        return null;
+        List<RImage> rImages = new ArrayList<>();
+        int[][] pixels = rImage.getPixels();
+        int sizeX = rImage.getSizeX();
+        int sizeY = rImage.getSizeY();
+        int cntStartY = 0;
+        int cntEndY = 0;
+        boolean flagSegmentation = false;
+        for (int i = cntStartY; i < sizeY; i++) {
+            for (int j = 0; j < sizeX; j++) {
+                flagSegmentation = false;
+                if (pixels[j][i] == 1) {
+                    cntEndY++;
+                    flagSegmentation = true;
+                    break;
+                }
+            }
+            if (!flagSegmentation) {
+                RImage rImageSegmented = getImageVertical(rImage, cntStartY, cntEndY);
+                cntEndY++;
+                cntStartY = cntEndY;
+                rImages.add(rImageSegmented);
+            }
+            if (cntEndY + 1 == sizeX) {
+                RImage rImageSegmented = getImageVertical(rImage, cntStartY, cntEndY);
+                rImages.add(rImageSegmented);
+                break;
+            }
+        }
+        return rImages;
     }
 
 
@@ -87,6 +111,11 @@ public class SegmentationService implements ISegmentationService {
             k[0] = 0;
         });
         return new RImage(sizeX, sizeY, resultPixels);
+    }
+
+    private RImage getImageVertical(RImage rImage, int cntStart, int cntEnd) {
+
+        return rImage;
     }
 
     private void optimize() {
