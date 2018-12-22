@@ -1,15 +1,17 @@
 package MLP.controllers;
 
+import MLP.models.ImageSegmentation;
 import MLP.services.TransformationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static MLP.configs.URL.FILE;
 import static MLP.configs.URL.URL_UPLOAD;
@@ -25,8 +27,8 @@ public class MLPRestController {
 
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpStatus uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException {
-        transformationService.transform(multipartFile);
-        return HttpStatus.OK;
+    public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException {
+        List<ImageSegmentation> imageSegmentations = transformationService.transform(multipartFile);
+        return ResponseEntity.ok(imageSegmentations);
     }
 }
