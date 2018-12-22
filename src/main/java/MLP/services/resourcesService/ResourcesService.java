@@ -46,12 +46,6 @@ public class ResourcesService implements IResourcesService {
     @Override
     public RImage resizeImage(RImage rImage) {
         int size = 50;
-        for (int i = 0; i < rImage.getPixels().length; i++) {
-            for (int j = 0; j < rImage.getPixels()[i].length; j++) {
-                System.out.print(rImage.getPixels()[i][j] + " ");
-            }
-            System.out.println();
-        }
         if (rImage.getSizeX() != size || rImage.getSizeY() != size) {
             int[][] pix = new int[size][size];
             IntStream.range(0, size)
@@ -61,13 +55,6 @@ public class ResourcesService implements IResourcesService {
                     IntStream.range(0, rImage.getSizeX()).forEach(j ->
                             pix[i][j] = rImage.getPixels()[i][j]
                     ));
-
-            for (int i = 0; i < pix.length; i++) {
-                for (int j = 0; j < pix[i].length; j++) {
-                    System.out.print(pix[i][j] + " ");
-                }
-                System.out.println();
-            }
 
             return new RImage(size, size, pix);
         } else return rImage;
@@ -89,20 +76,19 @@ public class ResourcesService implements IResourcesService {
         return bufferedImage;
     }
 
-    public RImage createRImage(String path, int x, int y, boolean flag) {
-        int[][] pixels = createPixelsInput(path, x, y);
-//        if (x != y && flag)
-//            RImage rImage = resizeImage(new RImage(x, y, pixels));
-//        int size = (x > y) ? x : y;
-        return new RImage(x, y, pixels);
+    public RImage createRImage(String path, boolean flag) {
+        int[][] pixels = createPixelsInput(path);
+        return new RImage(pixels[0].length, pixels.length, pixels);
     }
 
 
-    public int[][] createPixelsInput(String path, int sizeWidth, int sizeHeight) {
+    public int[][] createPixelsInput(String path) {
         File imgLoc = new File(path);
-        int[][] data = new int[sizeHeight][sizeWidth];
+        int[][] data = null;
         try {
             BufferedImage img = ImageIO.read(imgLoc);
+            int sizeWidth = img.getWidth();
+            int sizeHeight = img.getHeight();
             BufferedImage bi = new BufferedImage(
                     sizeWidth,
                     sizeHeight,
@@ -110,7 +96,8 @@ public class ResourcesService implements IResourcesService {
             Graphics2D g = bi.createGraphics();
             g.drawImage(img, 0, 0, null);
             g.dispose();
-
+            data = new int[sizeHeight][sizeWidth];
+            int[][] finalData = data;
             IntStream.range(0, sizeWidth)
                     .forEach(i ->
                             IntStream.range(0, sizeHeight)
@@ -118,9 +105,9 @@ public class ResourcesService implements IResourcesService {
                                         int[] d = new int[3];
                                         bi.getRaster().getPixel(i, j, d);
                                         if (d[0] > 128)
-                                            data[j][i] = 0;
+                                            finalData[j][i] = 0;
                                         else
-                                            data[j][i] = 1;
+                                            finalData[j][i] = 1;
                                     }));
         } catch (IOException ex) {
             log.error(path + " not loaded");

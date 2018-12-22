@@ -18,7 +18,7 @@ public interface IResourcesService {
 
     BufferedImage convertToImage(RImage rImage);
 
-    RImage createRImage(String path, int x, int y, boolean flag);
+    RImage createRImage(String path, boolean flag);
 
-    int[][] createPixelsInput(String path, int sizeWidth, int sizeHeight);
+    int[][] createPixelsInput(String path);
 }
