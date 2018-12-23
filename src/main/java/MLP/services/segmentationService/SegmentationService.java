@@ -41,7 +41,7 @@ public class SegmentationService implements ISegmentationService {
         for (int i = cntStartY; i < sizeY; i++) {
             for (int j = 0; j < sizeX; j++) {
                 flagSegmentation = false;
-                if (pixels[j][i] == 1) {
+                if (pixels[i][j] == 1) {
                     cntEndY++;
                     flagSegmentation = true;
                     break;
@@ -53,7 +53,7 @@ public class SegmentationService implements ISegmentationService {
                 cntStartY = cntEndY;
                 rImages.add(rImageSegmented);
             }
-            if (cntEndY + 1 == sizeX) {
+            if (cntEndY + 1 == sizeY) {
                 RImage rImageSegmented = getImageVertical(rImage, cntStartY, cntEndY);
                 rImages.add(rImageSegmented);
                 break;
@@ -86,7 +86,6 @@ public class SegmentationService implements ISegmentationService {
                 cntEndX++;
                 cntStartX = cntEndX;
                 rImages.add(rImageSegmented);
-                i = 0;
             }
             if (cntEndX + 1 == sizeX) {
                 RImage rImageSegmented = getImageHorizontal(rImage, cntStartX, cntEndX);
@@ -103,9 +102,9 @@ public class SegmentationService implements ISegmentationService {
         int[][] pixels = rImage.getPixels();
         int[][] resultPixels = new int[sizeY][sizeX];
         final int[] k = {0};
-        IntStream.range(0, sizeY).forEach(j -> {
+        IntStream.range(0, sizeX).forEach(j -> {
             IntStream.range(cntStart, cntEnd).forEach(i -> {
-                resultPixels[j][k[0]] = pixels[j][i];
+                resultPixels[k[0]][j] = pixels[i][j];
                 k[0]++;
             });
             k[0] = 0;
@@ -114,8 +113,18 @@ public class SegmentationService implements ISegmentationService {
     }
 
     private RImage getImageVertical(RImage rImage, int cntStart, int cntEnd) {
-
-        return rImage;
+        int sizeY = cntEnd - cntStart;
+        int sizeX = rImage.getSizeX();
+        int[][] pixels = rImage.getPixels();
+        int[][] resultPixels = new int[sizeY][sizeX];
+        final int[] k = {0};
+        IntStream.range(cntStart, cntEnd).forEach(j -> {
+            IntStream.range(0, sizeX).forEach(i -> {
+                resultPixels[k[0]][i] = pixels[j][i];
+            });
+            k[0]++;
+        });
+        return new RImage(sizeX, sizeY, resultPixels);
     }
 
     private void optimize() {
