@@ -1,5 +1,6 @@
 package MLP.models;
 
+import MLP.configs.DictionaryConfig;
 import lombok.Data;
 
 /**
@@ -11,4 +12,9 @@ public class ImageSegmentation {
     private Integer codeResult;
     private Double error;
     private String result;
+
+    public void setCodeResult(Integer codeResult) {
+        this.codeResult = codeResult;
+        this.result = DictionaryConfig.getDictionaryConfig().getResult(codeResult);
+    }
 }
