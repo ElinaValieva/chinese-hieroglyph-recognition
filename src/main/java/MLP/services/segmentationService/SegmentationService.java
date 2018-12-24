@@ -75,7 +75,7 @@ public class SegmentationService implements ISegmentationService {
         for (int i = cntStartX; i < sizeX; i++) {
             for (int j = 0; j < sizeY; j++) {
                 flagSegmentation = false;
-                if (pixels[i][j] == 1) {
+                if (pixels[j][i] == 1) {
                     flagSegmentation = true;
                     cntEndX++;
                     break;
@@ -102,9 +102,9 @@ public class SegmentationService implements ISegmentationService {
         int[][] pixels = rImage.getPixels();
         int[][] resultPixels = new int[sizeY][sizeX];
         final int[] k = {0};
-        IntStream.range(0, sizeX).forEach(j -> {
+        IntStream.range(0, sizeY).forEach(j -> {
             IntStream.range(cntStart, cntEnd).forEach(i -> {
-                resultPixels[k[0]][j] = pixels[i][j];
+                resultPixels[j][k[0]] = pixels[j][i];
                 k[0]++;
             });
             k[0] = 0;
