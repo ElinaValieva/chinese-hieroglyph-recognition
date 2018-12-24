@@ -6,28 +6,29 @@
     <link rel="stylesheet" href="css/styles.css"/>
     <link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="webjars/jquery/3.3.1/jquery.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/scriptH.js"></script>
 </head>
 <body>
 <div class="frame">
     <div class="center">
         <div class="bar"></div>
         <div class="title">Drop image to Recognizer</div>
-        <div class="dropzone">
-            <div class="content">
-                <img src="images/upload.svg" class="upload">
-                <span class="filename"></span>
-                <input type="file" name="file" class="input">
+        <form method="post" enctype="multipart/form-data" id="fileUploadForm">
+            <div class="dropzone">
+                <div class="content">
+                    <img src="images/upload.svg" class="upload">
+                    <span class="filename"></span>
+                    <input type="file" name="file" class="input">
+                </div>
             </div>
-        </div>
-        <img src="images/syncing.svg" class="syncing">
-        <img src="images/checkmark.svg" class="done">
-        <button class="uploadBtn btn btn-success btnClass" id="uploadFile">Upload Hieroglyph</button>
+            <img src="images/syncing.svg" class="syncing">
+            <img src="images/checkmark.svg" class="done">
+            <button class="uploadBtn btn btn-success btnClass" id="uploadFile">Upload Hieroglyph</button>
+        </form>
     </div>
     <div class="center2">
         <div class="title">Results</div>
-        <div id="contentResults">
-
+        <div id="contentResults" style="padding: 15px">
         </div>
     </div>
 </div>
