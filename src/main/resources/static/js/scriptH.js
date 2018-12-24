@@ -6,8 +6,6 @@ $(function () {
     var $syncing = $('.syncing');
     var $done = $('.done');
     var $bar = $('.bar');
-    var file;
-    var timeoutID;
 
     $dropzone.on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
         e.preventDefault();
@@ -32,7 +30,6 @@ $(function () {
 
     $("input:file").change(function () {
         fileName = $(this)[0].files[0].name;
-        file = $(this)[0].files[0];
         $('.filename').html(fileName);
         $('.dropzone .upload').hide();
     });
@@ -40,18 +37,13 @@ $(function () {
     function startUpload() {
         if (!uploading && fileName != '') {
             uploading = true;
-            uploadFile();
             $("#uploadFile").html('Uploading...');
             $dropzone.fadeOut();
             $syncing.addClass('active');
             $done.addClass('active');
             $bar.addClass('active');
+            uploadFile();
         }
-    }
-
-    function showDone() {
-        $("#uploadFile").html('Done');
-        $("#sendFile").prop("disabled", false);
     }
 
     function uploadFile() {
@@ -60,15 +52,28 @@ $(function () {
             type: "POST",
             enctype: 'multipart/form-data',
             url: "/upload",
-            data: file,
+            data: new FormData($('#fileUploadForm')[0]),
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             contentType: false,
             cache: false,
             timeout: 600000
         }).done(function (data) {
-            console.log("SUCCESS : ", data);
+            showDone(data);
         }).fail(function (e) {
             console.log("ERROR : ", e);
         });
+    }
+
+    function showDone(data) {
+        $("#uploadFile").html('Done');
+        console.log("SUCCESS : ", data);
+        var results = data;
+        alert(JSON.stringify(results));
+        $("#contentResults").empty();
+        for (var i = 0; i < results.length; i++) {
+            $("#contentResults").append("<img src='images/" + results[i].codeResult + ".png'><br/>" +
+                "<label class='text-warning'>" + results[i].result + "</label><br/><br/>"
+            )
+        }
     }
 });
