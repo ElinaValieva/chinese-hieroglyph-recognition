@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import marvin.image.MarvinSegment;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.stream.IntStream;
 
 /**
@@ -67,5 +70,9 @@ public class ImageUtility {
         );
 
         return bufferedImage;
+    }
+
+    public static BufferedImage getImage(String path) throws IOException {
+        return ImageIO.read(new File(path));
     }
 }
