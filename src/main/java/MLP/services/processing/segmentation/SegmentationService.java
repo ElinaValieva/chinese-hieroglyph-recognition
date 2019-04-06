@@ -3,7 +3,10 @@ package MLP.services.processing.segmentation;
 
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
+import MLP.model.HieroglyphRecognitionModel;
 import MLP.services.fileManagerService.IFileManagerService;
+import MLP.utility.ImageUtility;
+import MLP.utility.RecognitionModelMapUtility;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
@@ -13,6 +16,8 @@ import marvin.math.MarvinMath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static MLP.services.processing.segmentation.common.SegmentationConstants.*;
@@ -35,12 +40,15 @@ public class SegmentationService {
         this.fileManagerService = fileManagerService;
     }
 
-    public MarvinSegment[] segment(String imagePath) throws RecognitionException {
+    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException {
         log.debug("Start segmenting process for image: {}", imagePath);
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
 
         if (loadImage == null)
             throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
+
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = RecognitionModelMapUtility.mapToModel(loadImage);
+        List<HieroglyphRecognitionModel> hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage image = loadImage.clone();
         filterGreen(image);
@@ -51,11 +59,14 @@ public class SegmentationService {
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
+            int[][] resizingVector = ImageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
+            HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = RecognitionModelMapUtility.mapToModel(resizingVector);
+            hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
             loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
         });
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
 
-        return segments;
+        return hieroglyphRecognitionModels;
     }
 
     private void filterGreen(MarvinImage image) {
