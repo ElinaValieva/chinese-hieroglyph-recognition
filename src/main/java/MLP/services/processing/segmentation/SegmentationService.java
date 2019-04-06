@@ -16,6 +16,7 @@ import marvin.math.MarvinMath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -42,14 +43,14 @@ public class SegmentationService {
         this.fileManagerService = fileManagerService;
     }
 
-    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException {
+    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
         log.debug("Start segmenting process for image: {}", imagePath);
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
 
         if (loadImage == null)
             throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
 
-        HieroglyphRecognitionModel hieroglyphRecognitionModel = RecognitionModelMapUtility.mapToModel(loadImage);
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = RecognitionModelMapUtility.mapToModel(loadImage, imagePath);
         hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage image = loadImage.clone();
@@ -65,7 +66,7 @@ public class SegmentationService {
             loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
         });
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
-
+        
         return hieroglyphRecognitionModels;
     }
 

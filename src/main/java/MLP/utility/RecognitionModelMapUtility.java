@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import marvin.image.MarvinImage;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * author: ElinaValieva on 06.04.2019
@@ -14,8 +15,8 @@ import java.awt.image.BufferedImage;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecognitionModelMapUtility {
 
-    public static HieroglyphRecognitionModel mapToModel(MarvinImage marvinImage) {
-        BufferedImage bufferedImage = marvinImage.getBufferedImage();
+    public static HieroglyphRecognitionModel mapToModel(MarvinImage marvinImage, String path) throws IOException {
+        BufferedImage bufferedImage = ImageUtility.getImage(path);
         int[][] imageVector = ImageUtility.imageToVector(bufferedImage);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();

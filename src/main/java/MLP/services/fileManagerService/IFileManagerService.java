@@ -15,7 +15,7 @@ public interface IFileManagerService {
 
     void saveFile(MultipartFile file);
 
-    File createFile(String file) throws IOException;
+    File createFile(String fileName) throws IOException;
 
     void saveFile(BufferedImage bufferedImage, String fileName) throws IOException;
 
