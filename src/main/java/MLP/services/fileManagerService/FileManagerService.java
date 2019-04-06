@@ -1,6 +1,6 @@
 package MLP.services.fileManagerService;
 
-import MLP.configs.StorageConfig;
+import MLP.configuration.StorageConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +44,14 @@ public class FileManagerService implements IFileManagerService {
         }
     }
 
-    public File createFile(String file) throws IOException {
+    public File createFile(String fileName) throws IOException {
         try {
-            Path path = getFileDirectory(file);
+            Path path = getFileDirectory(fileName);
             Files.createFile(path);
         } catch (FileAlreadyExistsException e) {
             logger.error("", e);
         }
-        return getFileDirectory(file).toFile();
+        return getFileDirectory(fileName).toFile();
     }
 
     @Override
