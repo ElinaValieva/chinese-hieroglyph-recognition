@@ -99,4 +99,10 @@ public class FileManagerService implements IFileManagerService {
         }
         return rootDirectory.resolve(fileName);
     }
+
+    @Override
+    public String getFileResourceDirectory(String fileName) {
+        String path = new File(getClass().getClassLoader().getResource(fileName).getFile()).getPath();
+        return path;
+    }
 }

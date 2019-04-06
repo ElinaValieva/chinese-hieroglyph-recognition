@@ -3,11 +3,14 @@ package MLP.segmentation;
 
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
+import MLP.services.fileManagerService.IFileManagerService;
+import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
 import marvin.image.MarvinSegment;
 import marvin.io.MarvinImageIO;
 import marvin.math.MarvinMath;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.IntStream;
@@ -21,10 +24,19 @@ import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
  * Usage: Marvin Framework
  * author: ElinaValieva on 06.04.2019
  */
+@Log4j2
 @Service
 public class SegmentationService {
 
-    public void segment(String imagePath) throws RecognitionException {
+    private final IFileManagerService fileManagerService;
+
+    @Autowired
+    public SegmentationService(IFileManagerService fileManagerService) {
+        this.fileManagerService = fileManagerService;
+    }
+
+    public MarvinSegment[] segment(String imagePath) throws RecognitionException {
+        log.debug("Start segmenting process for image: {}", imagePath);
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
 
         if (loadImage == null)
@@ -41,7 +53,9 @@ public class SegmentationService {
             MarvinSegment segmentResult = segments[i];
             loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
         });
-        MarvinImageIO.saveImage(loadImage, "C:/Users/Elina/Desktop/result.png");
+        MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
+
+        return segments;
     }
 
     private void filterGreen(MarvinImage image) {
