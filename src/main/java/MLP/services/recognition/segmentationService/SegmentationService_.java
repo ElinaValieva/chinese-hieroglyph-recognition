@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
  */
 @Service
 @Log4j
-public class SegmentationService implements ISegmentationService {
+public class SegmentationService_ implements ISegmentationService {
 
     List<RImage> rImagesResult;
 

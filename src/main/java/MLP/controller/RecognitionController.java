@@ -1,4 +1,4 @@
-package MLP.controllers;
+package MLP.controller;
 
 import MLP.services.recognition.models.ImageSegmentation;
 import MLP.services.RecognitionService;
