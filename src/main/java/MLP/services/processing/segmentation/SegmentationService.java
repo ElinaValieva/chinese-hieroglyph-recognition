@@ -35,6 +35,8 @@ public class SegmentationService {
 
     private final IFileManagerService fileManagerService;
 
+    private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
+
     @Autowired
     public SegmentationService(IFileManagerService fileManagerService) {
         this.fileManagerService = fileManagerService;
@@ -48,7 +50,7 @@ public class SegmentationService {
             throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
 
         HieroglyphRecognitionModel hieroglyphRecognitionModel = RecognitionModelMapUtility.mapToModel(loadImage);
-        List<HieroglyphRecognitionModel> hieroglyphRecognitionModels = new ArrayList<>();
+        hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage image = loadImage.clone();
         filterGreen(image);
@@ -59,9 +61,7 @@ public class SegmentationService {
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
-            int[][] resizingVector = ImageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
-            HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = RecognitionModelMapUtility.mapToModel(resizingVector);
-            hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
+            formResult(hieroglyphRecognitionModel, segmentResult);
             loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
         });
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
@@ -70,17 +70,27 @@ public class SegmentationService {
     }
 
     private void filterGreen(MarvinImage image) {
-        final int[] redColor = new int[1];
-        final int[] greenColor = new int[1];
-        final int[] blueColor = new int[1];
         IntStream.range(0, image.getHeight()).forEach(height ->
                 IntStream.range(0, image.getWidth()).forEach(width -> {
-                    redColor[0] = image.getIntComponent0(width, height);
-                    greenColor[0] = image.getIntComponent1(width, height);
-                    blueColor[0] = image.getIntComponent2(width, height);
-                    if (greenColor[0] > redColor[0] * 1.5 && greenColor[0] > blueColor[0] * 1.5)
+                    int redColor = image.getIntComponent0(width, height);
+                    int greenColor = image.getIntComponent1(width, height);
+                    int blueColor = image.getIntComponent2(width, height);
+                    if (greenColor > redColor * 1.5 && greenColor > blueColor * 1.5)
                         image.setIntColor(width, height, 255, 255, 255);
                 })
         );
+    }
+
+    private boolean isAvailable(MarvinSegment marvinSegment) {
+        return marvinSegment.area > THRESHOLD_FOR_RESING;
+    }
+
+    private void formResult(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment segmentResult) {
+        if (!isAvailable(segmentResult))
+            return;
+
+        int[][] resizingVector = ImageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
+        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = RecognitionModelMapUtility.mapToModel(resizingVector);
+        hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
     }
 }
