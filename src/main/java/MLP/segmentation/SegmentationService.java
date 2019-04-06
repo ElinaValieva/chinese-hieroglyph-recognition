@@ -1,57 +1,61 @@
 package MLP.segmentation;
 
 
+import MLP.exception.ErrorCode;
+import MLP.exception.RecognitionException;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
 import marvin.image.MarvinSegment;
 import marvin.io.MarvinImageIO;
 import marvin.math.MarvinMath;
+import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.util.stream.IntStream;
 
+import static MLP.segmentation.common.SegmentationConstants.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 
 /**
+ * Service for segmentation hieroglyph for simple codes
+ * Usage: Marvin Framework
  * author: ElinaValieva on 06.04.2019
  */
+@Service
 public class SegmentationService {
 
-    public static void simpleSegmentation() {
-        MarvinImage original = MarvinImageIO.loadImage("C:/Users/Elina/Desktop/4.png");
-        MarvinImage image = original.clone();
-        // 2. Change green pixels to white
+    public void segment(String imagePath) throws RecognitionException {
+        MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
+
+        if (loadImage == null)
+            throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
+
+        MarvinImage image = loadImage.clone();
         filterGreen(image);
-        // 3. Use threshold to separate foreground and background.
-        MarvinImage bin = MarvinColorModelConverter.rgbToBinary(image, 127);
-        // 4. Morphological closing to group separated parts of the same object
-        morphologicalClosing(bin.clone(), bin, MarvinMath.getTrueMatrix(10, 10));
-        // 5. Use Floodfill segmention to get image segments
-        image = MarvinColorModelConverter.binaryToRgb(bin);
+        MarvinImage marvinImage = MarvinColorModelConverter.rgbToBinary(image, THRESHOLD);
+        morphologicalClosing(marvinImage.clone(), marvinImage, MarvinMath.getTrueMatrix(MATRIX_ROW_SIZE_X, MATRIX_ROW_SIZE_Y));
+        image = MarvinColorModelConverter.binaryToRgb(marvinImage);
         MarvinSegment[] segments = floodfillSegmentation(image);
-        // 6. Show the segments in the original image
-        for (int i = 1; i < segments.length; i++) {
-            MarvinSegment seg = segments[i];
-            original.drawRect(seg.x1, seg.y1, seg.width, seg.height, Color.GREEN);
-        }
-        MarvinImageIO.saveImage(original, "C:/Users/Elina/Desktop/result.png");
+
+        IntStream.range(1, segments.length).forEach(i -> {
+            MarvinSegment segmentResult = segments[i];
+            loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
+        });
+        MarvinImageIO.saveImage(loadImage, "C:/Users/Elina/Desktop/result.png");
     }
 
-    private static void filterGreen(MarvinImage image) {
-        int r, g, b;
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                r = image.getIntComponent0(x, y);
-                g = image.getIntComponent1(x, y);
-                b = image.getIntComponent2(x, y);
-                if (g > r * 1.5 && g > b * 1.5) {
-                    image.setIntColor(x, y, 255, 255, 255);
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        simpleSegmentation();
+    private void filterGreen(MarvinImage image) {
+        final int[] redColor = new int[1];
+        final int[] greenColor = new int[1];
+        final int[] blueColor = new int[1];
+        IntStream.range(0, image.getHeight()).forEach(height ->
+                IntStream.range(0, image.getWidth()).forEach(width -> {
+                    redColor[0] = image.getIntComponent0(width, height);
+                    greenColor[0] = image.getIntComponent1(width, height);
+                    blueColor[0] = image.getIntComponent2(width, height);
+                    if (greenColor[0] > redColor[0] * 1.5 && greenColor[0] > blueColor[0] * 1.5)
+                        image.setIntColor(width, height, 255, 255, 255);
+                })
+        );
     }
 }
