@@ -1,7 +1,7 @@
-package MLP.services.multiLayerPerseptronService;
+package MLP.services.recognition.multiLayerPerseptronService;
 
-import MLP.funtionsActivation.FunctionActivation;
-import MLP.models.Layer;
+import MLP.services.recognition.funtionsActivation.FunctionActivation;
+import MLP.services.recognition.models.Layer;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.IntStream;

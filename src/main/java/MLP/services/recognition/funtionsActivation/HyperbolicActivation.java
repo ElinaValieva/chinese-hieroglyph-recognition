@@ -1,4 +1,4 @@
-package MLP.funtionsActivation;
+package MLP.services.recognition.funtionsActivation;
 
 public class HyperbolicActivation implements FunctionActivation {
 

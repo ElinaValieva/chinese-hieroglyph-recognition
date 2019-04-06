@@ -3,8 +3,8 @@ package MLP.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static MLP.configs.URL.URL_VIEW;
-import static MLP.configs.URL.VIEW;
+import static MLP.common.ApplicationConstants.URL_VIEW;
+import static MLP.common.ApplicationConstants.VIEW;
 
 /**
  * author: ElinaValieva on 15.12.2018

@@ -1,6 +1,6 @@
-package MLP.services.segmentationService;
+package MLP.services.recognition.segmentationService;
 
-import MLP.models.RImage;
+import MLP.services.recognition.models.RImage;
 
 import java.util.List;
 

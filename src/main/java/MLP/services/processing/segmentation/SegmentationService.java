@@ -1,4 +1,4 @@
-package MLP.segmentation;
+package MLP.services.processing.segmentation;
 
 
 import MLP.exception.ErrorCode;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.IntStream;
 
-import static MLP.segmentation.common.SegmentationConstants.*;
+import static MLP.services.processing.segmentation.common.SegmentationConstants.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 

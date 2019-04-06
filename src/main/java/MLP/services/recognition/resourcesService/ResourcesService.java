@@ -1,6 +1,6 @@
-package MLP.services.resourcesService;
+package MLP.services.recognition.resourcesService;
 
-import MLP.models.RImage;
+import MLP.services.recognition.models.RImage;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 

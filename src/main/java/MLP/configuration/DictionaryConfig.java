@@ -1,4 +1,4 @@
-package MLP.configs;
+package MLP.configuration;
 
 import java.util.HashMap;
 import java.util.Map;

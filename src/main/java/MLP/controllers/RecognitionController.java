@@ -1,7 +1,7 @@
 package MLP.controllers;
 
-import MLP.models.ImageSegmentation;
-import MLP.services.TransformationService;
+import MLP.services.recognition.models.ImageSegmentation;
+import MLP.services.RecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +13,25 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static MLP.configs.URL.FILE;
-import static MLP.configs.URL.URL_UPLOAD;
+import static MLP.common.ApplicationConstants.FILE;
+import static MLP.common.ApplicationConstants.URL_UPLOAD;
 
 /**
  * author: ElinaValieva on 15.12.2018
  */
 @RestController
-public class MLPRestController {
+public class RecognitionController {
+
+    private final RecognitionService recognitionService;
 
     @Autowired
-    private TransformationService transformationService;
-
+    public RecognitionController(RecognitionService recognitionService) {
+        this.recognitionService = recognitionService;
+    }
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException {
-        List<ImageSegmentation> imageSegmentations = transformationService.transform(multipartFile);
+        List<ImageSegmentation> imageSegmentations = recognitionService.transform(multipartFile);
         return ResponseEntity.ok(imageSegmentations);
     }
 }

@@ -1,12 +1,12 @@
 package MLP.services;
 
-import MLP.funtionsActivation.SigmoidActivation;
-import MLP.models.ImageSegmentation;
-import MLP.models.RImage;
+import MLP.services.recognition.funtionsActivation.SigmoidActivation;
+import MLP.services.recognition.models.ImageSegmentation;
+import MLP.services.recognition.models.RImage;
 import MLP.services.fileManagerService.IFileManagerService;
-import MLP.services.multiLayerPerseptronService.IMultiLayerPerceptronService;
-import MLP.services.resourcesService.IResourcesService;
-import MLP.services.segmentationService.ISegmentationService;
+import MLP.services.recognition.multiLayerPerseptronService.IMultiLayerPerceptronService;
+import MLP.services.recognition.resourcesService.IResourcesService;
+import MLP.services.recognition.segmentationService.ISegmentationService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 
 @Service
 @Log4j
-public class TransformationService {
+public class RecognitionService {
 
     @Autowired
     private ISegmentationService segmentationService;

@@ -1,6 +1,6 @@
-package MLP.services.segmentationService;
+package MLP.services.recognition.segmentationService;
 
-import MLP.models.RImage;
+import MLP.services.recognition.models.RImage;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 

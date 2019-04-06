@@ -1,4 +1,4 @@
-package MLP.models;
+package MLP.services.recognition.models;
 
 import java.util.stream.IntStream;
 

@@ -1,6 +1,6 @@
-package MLP.models;
+package MLP.services.recognition.models;
 
-import MLP.configs.DictionaryConfig;
+import MLP.configuration.DictionaryConfig;
 import lombok.Data;
 
 /**

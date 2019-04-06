@@ -1,6 +1,6 @@
-package MLP.services.multiLayerPerseptronService;
+package MLP.services.recognition.multiLayerPerseptronService;
 
-import MLP.funtionsActivation.FunctionActivation;
+import MLP.services.recognition.funtionsActivation.FunctionActivation;
 
 /**
  * author: ElinaValieva on 15.12.2018

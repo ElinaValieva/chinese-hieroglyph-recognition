@@ -1,4 +1,4 @@
-package MLP.segmentation.common;
+package MLP.services.processing.segmentation.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,7 @@ import java.awt.*;
 
 /**
  * author: ElinaValieva on 06.04.2019
+ * Constants for segmentation
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SegmentationConstants {

@@ -1,6 +1,6 @@
-package MLP.services.resourcesService;
+package MLP.services.recognition.resourcesService;
 
-import MLP.models.RImage;
+import MLP.services.recognition.models.RImage;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
