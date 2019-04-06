@@ -26,4 +26,6 @@ public interface IFileManagerService {
     Resource loadFile(String fileName) throws IOException;
 
     Path getFileDirectory(String fileName) throws IOException;
+
+    String getFileResourceDirectory(String fileName);
 }
