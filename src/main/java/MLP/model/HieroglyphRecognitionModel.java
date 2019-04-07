@@ -1,7 +1,7 @@
 package MLP.model;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 import java.awt.image.BufferedImage;
 
@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  * @value width - width image
  * @value height - height image
  */
-@Getter
+@Data
 @Builder
 public class HieroglyphRecognitionModel {
 

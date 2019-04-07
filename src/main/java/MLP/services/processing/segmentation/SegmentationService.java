@@ -7,6 +7,7 @@ import MLP.model.HieroglyphRecognitionModel;
 import MLP.services.fileManagerService.IFileManagerService;
 import MLP.utility.ImageUtility;
 import MLP.utility.RecognitionModelMapUtility;
+import MLP.utility.ResizeUtility;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
@@ -65,8 +66,8 @@ public class SegmentationService {
             formResult(hieroglyphRecognitionModel, segmentResult);
             loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
         });
+
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
-        
         return hieroglyphRecognitionModels;
     }
 
@@ -91,6 +92,7 @@ public class SegmentationService {
             return;
 
         int[][] resizingVector = ImageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
+        resizingVector = ResizeUtility.resize(resizingVector);
         HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = RecognitionModelMapUtility.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
     }
