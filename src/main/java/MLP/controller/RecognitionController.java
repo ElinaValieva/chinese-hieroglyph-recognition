@@ -1,7 +1,7 @@
 package MLP.controller;
 
 import MLP.services.recognition.models.ImageSegmentation;
-import MLP.services.RecognitionService;
+import MLP.services.recognition.RecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

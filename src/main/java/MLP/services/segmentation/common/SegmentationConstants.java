@@ -1,4 +1,4 @@
-package MLP.services.processing.segmentation.common;
+package MLP.services.segmentation.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,10 @@
-package MLP.services.processing.segmentation;
+package MLP.services.segmentation;
 
 
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
-import MLP.services.fileManagerService.IFileManagerService;
+import MLP.utility.FileUtility;
 import MLP.utility.ImageUtility;
 import MLP.utility.RecognitionModelMapUtility;
 import MLP.utility.ResizeUtility;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static MLP.services.processing.segmentation.common.SegmentationConstants.*;
+import static MLP.services.segmentation.common.SegmentationConstants.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 
@@ -35,13 +35,22 @@ import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 @Service
 public class SegmentationService {
 
-    private final IFileManagerService fileManagerService;
+    private final FileUtility fileManagerService;
+    private final ImageUtility imageUtility;
+    private final RecognitionModelMapUtility recognitionModelMapUtility;
+    private final ResizeUtility resizeUtility;
 
     private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
 
     @Autowired
-    public SegmentationService(IFileManagerService fileManagerService) {
+    public SegmentationService(FileUtility fileManagerService,
+                               ImageUtility imageUtility,
+                               RecognitionModelMapUtility recognitionModelMapUtility,
+                               ResizeUtility resizeUtility) {
         this.fileManagerService = fileManagerService;
+        this.imageUtility = imageUtility;
+        this.recognitionModelMapUtility = recognitionModelMapUtility;
+        this.resizeUtility = resizeUtility;
     }
 
     public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
@@ -51,7 +60,7 @@ public class SegmentationService {
         if (loadImage == null)
             throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
 
-        HieroglyphRecognitionModel hieroglyphRecognitionModel = RecognitionModelMapUtility.mapToModel(loadImage, imagePath);
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = recognitionModelMapUtility.mapToModel(imagePath);
         hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage image = loadImage.clone();
@@ -91,9 +100,9 @@ public class SegmentationService {
         if (!isAvailable(segmentResult))
             return;
 
-        int[][] resizingVector = ImageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
-        resizingVector = ResizeUtility.resize(resizingVector);
-        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = RecognitionModelMapUtility.mapToModel(resizingVector);
+        int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
+        resizingVector = resizeUtility.resize(resizingVector);
+        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = recognitionModelMapUtility.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
     }
 }
