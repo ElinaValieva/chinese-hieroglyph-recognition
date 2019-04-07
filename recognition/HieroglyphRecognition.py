@@ -1,27 +1,33 @@
-import numpy as np
+import numpy as numpy
 from keras.preprocessing import image
 from keras.models import model_from_json
+import recognition.HieroglyphNNModel as nn
 
-# Загружаем изображение
-img_path = 'test.png'
-img = image.load_img(img_path, target_size=(28, 28), color_mode="grayscale")
 
-# Преобразуем изображением в массив numpy
-x = image.img_to_array(img)
+def recognize(image_path):
+    image_format = image.load_img(image_path, target_size=(28, 28), color_mode="grayscale")
 
-# Инвертируем и нормализуем изображение
-x = 255 - x
-x /= 255
-x = np.expand_dims(x, axis=0)
+    # Transform image to vector
+    vector = image.img_to_array(image_format)
 
-json_file = open("mnist_model.json", "r")
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-loaded_model.load_weights("mnist_model.h5")
+    # Normalization image
+    vector = 255 - vector
+    vector /= 255
+    vector = numpy.expand_dims(vector, axis=1)
 
-loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+    try:
+        # Loading model from json
+        json_file = open("../recognition/mnist_model.json", "r")
+        loaded_model_json = json_file.read()
+        json_file.close()
+        loaded_model = model_from_json(loaded_model_json)
+        loaded_model.load_weights("../recognition/mnist_model.h5")
+        loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+    except FileNotFoundError:
+        print('File not found error. Try to train NN')
+        nn.train()
 
-prediction = loaded_model.predict(x)
-
-print(np.argmax(prediction))
+    # Prediction result of input
+    prediction = loaded_model.predict(vector)
+    result = numpy.argmax(prediction)
+    return result
