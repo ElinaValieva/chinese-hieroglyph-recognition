@@ -15,4 +15,4 @@
  2. `Maven 3+`            - for building package
 
 ### Additional application
-###  :secret:  [Hieroglyph Recognition Neural Network]([https://github.com/ElinaValieva/hieroglyph-recognition-neural-network](https://github.com/ElinaValieva/hieroglyph-recognition-neural-network) "Railway Empire Client")
+###  :secret:  [Hieroglyph Recognition Neural Network](https://github.com/ElinaValieva/hieroglyph-recognition-neural-network)
