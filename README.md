@@ -8,5 +8,5 @@
  - Keras with Tensorflow
  - Flask for RestFull
 
-### Additional application
-###  :secret:  [Hieroglyph Recognition Backend]([https://github.com/ElinaValieva/hieroglyph-recognition](https://github.com/ElinaValieva/hieroglyph-recognition)
+### Additional application :star:
+###  :secret:  [Hieroglyph Recognition Backend](https://github.com/ElinaValieva/hieroglyph-recognition)
