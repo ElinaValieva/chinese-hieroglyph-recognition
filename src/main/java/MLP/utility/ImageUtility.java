@@ -1,10 +1,9 @@
 package MLP.utility;
 
 import MLP.model.HieroglyphRecognitionModel;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import marvin.image.MarvinSegment;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,10 +17,10 @@ import java.util.stream.IntStream;
  * Utility for converting image to vector and vector to image
  */
 @Log4j2
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class ImageUtility {
 
-    static int[][] imageToVector(BufferedImage bufferedImage) {
+    public int[][] imageToVector(BufferedImage bufferedImage) {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         BufferedImage bufferedProcessingImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
@@ -42,7 +41,7 @@ public class ImageUtility {
         return outputResult;
     }
 
-    private static int[][] resizeVector(int[][] vector, Point startPoint, int width, int height) {
+    private int[][] resizeVector(int[][] vector, Point startPoint, int width, int height) {
         int[][] outputResult = new int[height][width];
         int startPointX = startPoint.x;
         int startPointY = startPoint.y;
@@ -52,12 +51,12 @@ public class ImageUtility {
         return outputResult;
     }
 
-    public static int[][] resizeVector(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment marvinSegment) {
+    public int[][] resizeVector(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment marvinSegment) {
         Point startPoint = new Point(marvinSegment.x1, marvinSegment.y1);
         return resizeVector(hieroglyphRecognitionModel.getVector(), startPoint, marvinSegment.width, marvinSegment.height);
     }
 
-    static BufferedImage vectorToImage(int[][] vector) {
+    public BufferedImage vectorToImage(int[][] vector) {
         int width = vector.length;
         int height = vector[0].length;
         BufferedImage bufferedImage = new BufferedImage(height, width, BufferedImage.TYPE_BYTE_BINARY);
@@ -72,7 +71,7 @@ public class ImageUtility {
         return bufferedImage;
     }
 
-    public static BufferedImage getImage(String path) throws IOException {
+    public BufferedImage getImage(String path) throws IOException {
         return ImageIO.read(new File(path));
     }
 }

@@ -1,12 +1,10 @@
-package MLP.services.fileManagerService;
+package MLP.utility;
 
 import MLP.configuration.StorageConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,24 +14,25 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.Objects;
 
 /**
  * author: ElinaValieva on 15.12.2018
+ * Component for working with files
  */
-@Service
-public class FileManagerService implements IFileManagerService {
+@Component
+public class FileUtility {
 
-    public final Path rootDirectory;
+    private final Path rootDirectory;
 
-    private final Logger logger = LoggerFactory.getLogger(FileManagerService.class);
+    private final Logger logger = LoggerFactory.getLogger(FileUtility.class);
 
     @Autowired
-    public FileManagerService(StorageConfig storageConfig) {
+    public FileUtility(StorageConfig storageConfig) {
         rootDirectory = Paths.get(storageConfig.getLocation());
     }
 
-    @Override
-    public void saveFile(MultipartFile file) {
+    public void createImage(MultipartFile file) {
         logger.debug("Try to save file {}", file.getOriginalFilename());
         try (InputStream inputStream = file.getInputStream()) {
             Path path = getFileDirectory(file.getOriginalFilename());
@@ -44,7 +43,7 @@ public class FileManagerService implements IFileManagerService {
         }
     }
 
-    public File createFile(String fileName) throws IOException {
+    private File createFile(String fileName) throws IOException {
         try {
             Path path = getFileDirectory(fileName);
             Files.createFile(path);
@@ -54,13 +53,15 @@ public class FileManagerService implements IFileManagerService {
         return getFileDirectory(fileName).toFile();
     }
 
-    @Override
-    public void saveFile(BufferedImage bufferedImage, String fileName) throws IOException {
+    public void createImage(BufferedImage bufferedImage, String fileName) throws IOException {
         ImageIO.write(bufferedImage, "png", createFile(fileName));
     }
 
+    public void saveImage(BufferedImage bufferedImage, String fileName) throws IOException {
+        ImageIO.write(bufferedImage, "png", new File(fileName));
+    }
 
-    @Override
+
     public void deleteAll() {
         logger.debug("Try to delete all files");
         FileSystemUtils.deleteRecursively(rootDirectory.toFile());
@@ -68,29 +69,6 @@ public class FileManagerService implements IFileManagerService {
     }
 
 
-    @Override
-    public void deleteFile(String fileName) throws IOException {
-        logger.debug("Try to delete file {}", fileName);
-        Path path = getFileDirectory(fileName);
-        Files.delete(path);
-        logger.debug("Delete file {}", fileName);
-    }
-
-
-    @Override
-    public Resource loadFile(String fileName) throws IOException {
-        logger.debug("Try to load file {}", fileName);
-        Path file = getFileDirectory(fileName);
-        org.springframework.core.io.Resource resource = new UrlResource(file.toUri());
-
-        if (resource.exists() || resource.isReadable()) {
-            logger.debug("Load resource ...");
-            return resource;
-        } else throw new IOException("File not found");
-    }
-
-
-    @Override
     public Path getFileDirectory(String fileName) throws IOException {
         if (!Files.exists(rootDirectory)) {
             logger.debug("Try to create directory for files");
@@ -100,9 +78,9 @@ public class FileManagerService implements IFileManagerService {
         return rootDirectory.resolve(fileName);
     }
 
-    @Override
     public String getFileResourceDirectory(String fileName) {
-        String path = new File(getClass().getClassLoader().getResource(fileName).getFile()).getPath();
-        return path;
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
+        return file.getPath();
     }
 }

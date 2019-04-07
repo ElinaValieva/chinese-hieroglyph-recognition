@@ -1,9 +1,8 @@
 package MLP.utility;
 
 import MLP.model.HieroglyphRecognitionModel;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import marvin.image.MarvinImage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,12 +11,19 @@ import java.io.IOException;
  * author: ElinaValieva on 06.04.2019
  * HieroglyphRecognitionModel mapping utility
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class RecognitionModelMapUtility {
 
-    public static HieroglyphRecognitionModel mapToModel(MarvinImage marvinImage, String path) throws IOException {
-        BufferedImage bufferedImage = ImageUtility.getImage(path);
-        int[][] imageVector = ImageUtility.imageToVector(bufferedImage);
+    private final ImageUtility imageUtility;
+
+    @Autowired
+    public RecognitionModelMapUtility(ImageUtility imageUtility) {
+        this.imageUtility = imageUtility;
+    }
+
+    public HieroglyphRecognitionModel mapToModel(String path) throws IOException {
+        BufferedImage bufferedImage = imageUtility.getImage(path);
+        int[][] imageVector = imageUtility.imageToVector(bufferedImage);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         return HieroglyphRecognitionModel.builder()
@@ -28,8 +34,8 @@ public class RecognitionModelMapUtility {
                 .build();
     }
 
-    public static HieroglyphRecognitionModel mapToModel(int[][] vector){
-        BufferedImage bufferedImage = ImageUtility.vectorToImage(vector);
+    public HieroglyphRecognitionModel mapToModel(int[][] vector) {
+        BufferedImage bufferedImage = imageUtility.vectorToImage(vector);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         return HieroglyphRecognitionModel.builder()
