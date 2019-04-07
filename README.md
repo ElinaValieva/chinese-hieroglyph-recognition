@@ -14,5 +14,5 @@
  1. `JDK 1.8` at least - for running app
  2. `Maven 3+`            - for building package
 
-### Additional application
+### Additional application :star:
 ###  :secret:  [Hieroglyph Recognition Neural Network](https://github.com/ElinaValieva/hieroglyph-recognition-neural-network)
