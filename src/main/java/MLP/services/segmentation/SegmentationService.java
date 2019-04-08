@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -72,8 +73,7 @@ public class SegmentationService {
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
-            formResult(hieroglyphRecognitionModel, segmentResult);
-            loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
+            formResult(hieroglyphRecognitionModel, segmentResult, loadImage);
         });
 
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
@@ -96,13 +96,30 @@ public class SegmentationService {
         return marvinSegment.area > THRESHOLD_FOR_RESING;
     }
 
-    private void formResult(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment segmentResult) {
+    private void formResult(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment segmentResult, MarvinImage loadImage) {
         if (!isAvailable(segmentResult))
             return;
 
         int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
+
+        if (!isNotEmptyImage(resizingVector))
+            return;
+
         resizingVector = resizeUtility.resize(resizingVector);
         HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = recognitionModelMapUtility.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
+        loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
+    }
+
+    private boolean isNotEmptyImage(int[][] vector) {
+        int height = vector.length;
+        int[] resultList = new int[height];
+        int thresholdHeight = Math.toIntExact(Math.round(height * 0.5));
+        IntStream.range(0, height).forEach(heightIndex ->
+                resultList[heightIndex] = Arrays.stream(vector[heightIndex]).max().getAsInt()
+        );
+
+        long cntEmptyElement = Arrays.stream(resultList).filter(element -> element == 0).count();
+        return cntEmptyElement < thresholdHeight;
     }
 }
