@@ -1,6 +1,5 @@
 package MLP.services.recognition.models;
 
-import MLP.configuration.DictionaryConfig;
 import lombok.Data;
 
 /**
@@ -15,6 +14,5 @@ public class ImageSegmentation {
 
     public void setCodeResult(Integer codeResult) {
         this.codeResult = codeResult;
-        this.result = DictionaryConfig.getDictionaryConfig().getResult(codeResult);
     }
 }

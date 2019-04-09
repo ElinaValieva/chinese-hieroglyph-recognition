@@ -1,6 +1,6 @@
 package MLP.utility;
 
-import MLP.configuration.StorageConfig;
+import MLP.configuration.StorageProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class FileUtility {
     private final Logger logger = LoggerFactory.getLogger(FileUtility.class);
 
     @Autowired
-    public FileUtility(StorageConfig storageConfig) {
-        rootDirectory = Paths.get(storageConfig.getLocation());
+    public FileUtility(StorageProperty storageProperty) {
+        rootDirectory = Paths.get(storageProperty.location);
     }
 
     public void createImage(MultipartFile file) {

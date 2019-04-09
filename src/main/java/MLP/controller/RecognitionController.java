@@ -31,7 +31,7 @@ public class RecognitionController {
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException {
-        List<ImageSegmentation> imageSegmentations = recognitionService.transform(multipartFile);
-        return ResponseEntity.ok(imageSegmentations);
+        List<ImageSegmentation> imageSegmentation = recognitionService.transform(multipartFile);
+        return ResponseEntity.ok(imageSegmentation);
     }
 }
