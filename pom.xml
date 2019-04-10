@@ -116,5 +116,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>hieroglyph_recognition_backend</finalName>
     </build>
 </project>
