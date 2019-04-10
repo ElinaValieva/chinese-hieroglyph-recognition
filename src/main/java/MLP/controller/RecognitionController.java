@@ -1,7 +1,7 @@
 package MLP.controller;
 
 import MLP.services.recognition.models.ImageSegmentation;
-import MLP.services.RecognitionService;
+import MLP.services.recognition.RecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class RecognitionController {
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException {
-        List<ImageSegmentation> imageSegmentations = recognitionService.transform(multipartFile);
-        return ResponseEntity.ok(imageSegmentations);
+        List<ImageSegmentation> imageSegmentation = recognitionService.transform(multipartFile);
+        return ResponseEntity.ok(imageSegmentation);
     }
 }

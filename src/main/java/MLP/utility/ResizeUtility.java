@@ -1,6 +1,6 @@
 package MLP.utility;
 
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.IntStream;
 
@@ -8,12 +8,12 @@ import java.util.stream.IntStream;
  * author: ElinaValieva on 07.04.2019
  * Service for resizing images
  */
-@NoArgsConstructor
+@Component
 public class ResizeUtility {
 
     private static final int RESIZE_X = 50;
 
-    public static int[][] resize(int[][] vector) {
+    public int[][] resize(int[][] vector) {
         int width = vector[0].length;
         int height = vector.length;
         return (width < RESIZE_X && height < RESIZE_X) ?
@@ -21,7 +21,7 @@ public class ResizeUtility {
                 vector;
     }
 
-    private static int[][] resizeX(int[][] vector) {
+    private int[][] resizeX(int[][] vector) {
         int width = vector[0].length;
         int height = vector.length;
         int[][] resultVector = new int[RESIZE_X][RESIZE_X];

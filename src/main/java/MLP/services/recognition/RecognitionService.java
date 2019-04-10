@@ -1,13 +1,13 @@
-package MLP.services;
+package MLP.services.recognition;
 
 import MLP.services.recognition.funtionsActivation.SigmoidActivation;
 import MLP.services.recognition.models.ImageSegmentation;
 import MLP.services.recognition.models.RImage;
-import MLP.services.fileManagerService.IFileManagerService;
 import MLP.services.recognition.multiLayerPerseptronService.IMultiLayerPerceptronService;
 import MLP.services.recognition.resourcesService.IResourcesService;
 import MLP.services.recognition.segmentationService.ISegmentationService;
-import lombok.extern.log4j.Log4j;
+import MLP.utility.FileUtility;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
  */
 
 @Service
-@Log4j
+@Log4j2
 public class RecognitionService {
 
     @Autowired
@@ -33,7 +33,7 @@ public class RecognitionService {
     private IResourcesService resourcesService;
 
     @Autowired
-    private IFileManagerService fileManagerService;
+    private FileUtility fileManagerService;
 
     @Autowired
     private IMultiLayerPerceptronService multiLayerPerceptronService;
@@ -49,7 +49,7 @@ public class RecognitionService {
 
     public List<ImageSegmentation> transform(MultipartFile multipartFile) throws IOException {
         fileManagerService.deleteAll();
-        fileManagerService.saveFile(multipartFile);
+        fileManagerService.createImage(multipartFile);
         String path = fileManagerService.getFileDirectory(multipartFile.getOriginalFilename()).toString();
         RImage rImage = resourcesService.createRImage(path, false);
         List<RImage> rImageList = segmentationService.segmentation(rImage);
@@ -63,7 +63,7 @@ public class RecognitionService {
                 ImageSegmentation imageSegmentation = new ImageSegmentation();
                 imageSegmentation.setPathImage(fileName);
                 testing(newRImage, imageSegmentation);
-                fileManagerService.saveFile(bufferedImage, fileName);
+                fileManagerService.createImage(bufferedImage, fileName);
             } catch (IOException e) {
                 log.error("", e);
             }

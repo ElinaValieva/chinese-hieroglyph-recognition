@@ -1,7 +1,7 @@
 package MLP.services.recognition.segmentationService;
 
 import MLP.services.recognition.models.RImage;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * author: ElinaValieva on 15.12.2018
  */
 @Service
-@Log4j
+@Log4j2
 public class SegmentationService_ implements ISegmentationService {
 
     List<RImage> rImagesResult;
