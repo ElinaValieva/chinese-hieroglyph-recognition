@@ -34,7 +34,7 @@ def train():
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
     # Train model
-    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=2)
+    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10)
 
     # Saving model to json file
     model_json = model.to_json()

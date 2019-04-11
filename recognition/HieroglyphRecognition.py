@@ -17,11 +17,11 @@ def recognize(image_path):
 
     try:
         # Loading model from json
-        json_file = open("../recognition/mnist_model.json", "r")
+        json_file = open("../controller/mnist_model.json", "r")
         loaded_model_json = json_file.read()
         json_file.close()
         loaded_model = model_from_json(loaded_model_json)
-        loaded_model.load_weights("../recognition/mnist_model.h5")
+        loaded_model.load_weights("../controller/mnist_model.h5")
         loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
     except FileNotFoundError:
         print('File not found error. Try to train NN')
