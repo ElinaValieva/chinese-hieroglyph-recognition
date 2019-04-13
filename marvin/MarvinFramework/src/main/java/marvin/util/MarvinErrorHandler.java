@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Dialog message errors.
- * @version 1.0 03/28/08
+ * @version 30.0 03/28/08
  * 
  * @author Gabriel Ambr�sio Archanjo
  * @author Danilo Rosetto Mu�oz

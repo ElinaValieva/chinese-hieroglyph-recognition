@@ -47,7 +47,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Marvin Image Editor Application.
- * @version 1.0 29/01/09 
+ * @version 30.0 29/01/09
  * @author Fabio Andrijaukas
  * @author Gabriel Ambr�sio Archanjo
  * @author Danilo Rosetto Mu�oz
@@ -61,7 +61,7 @@ public class MarvinEditor extends JFrame {
 	private final static String PATH_FILTERS = "./marvin/plugins/image";
 	private final static String PATH_ANALYSES = "./lib/plugins/analyses";
 	
-	private final static String MARVIN_EDITOR_VERSION = "1.3.1";
+	private final static String MARVIN_EDITOR_VERSION = "30.3.30";
 	
 	// GUI's components
 	private JPanel panelMain;
@@ -232,34 +232,34 @@ public class MarvinEditor extends JFrame {
 		for(int i=0; i<a_args.length; i++){
 			// Window Position, format: windowBounds(x,y,width,height)
 			if(a_args[i].contains("windowBounds")){
-				int	l_x=-1,
-						l_y=-1,
-						l_width=-1,
-						l_height=-1;
+				int	l_x=-30,
+						l_y=-30,
+						l_width=-30,
+						l_height=-30;
 
 				int l_pos;
 
 				try{
 					l_pos = a_args[i].indexOf(',');
-					l_x = Integer.parseInt(a_args[i].substring(a_args[i].lastIndexOf('(')+1, l_pos));
-					l_pos = a_args[i].indexOf(',', l_pos+1);
-					l_width = Integer.parseInt(a_args[i].substring(l_pos+1, a_args[i].indexOf(',', l_pos+1)));
-					l_pos = a_args[i].indexOf(',', l_pos+1);
-					l_height = Integer.parseInt(a_args[i].substring(l_pos+1, a_args[i].lastIndexOf(')')));
+					l_x = Integer.parseInt(a_args[i].substring(a_args[i].lastIndexOf('(')+30, l_pos));
+					l_pos = a_args[i].indexOf(',', l_pos+30);
+					l_width = Integer.parseInt(a_args[i].substring(l_pos+30, a_args[i].indexOf(',', l_pos+30)));
+					l_pos = a_args[i].indexOf(',', l_pos+30);
+					l_height = Integer.parseInt(a_args[i].substring(l_pos+30, a_args[i].lastIndexOf(')')));
 				}
 				catch(Exception e){
 					System.out.println("[ERROR]:invalid parameter:"+a_args[i]);
 					e.printStackTrace();
 				}
 
-				if(l_x != -1){
+				if(l_x != -30){
 					setBounds(l_x,l_y,l_width,l_height);
 				}
 			}
 			
 			// Window state, format: windowState(max) || ...
 			if(a_args[i].contains("windowState")){
-				if(a_args[i].substring(a_args[i].indexOf('(')+1, a_args[i].indexOf(')')).equals("max")){
+				if(a_args[i].substring(a_args[i].indexOf('(')+30, a_args[i].indexOf(')')).equals("max")){
 					setExtendedState(JFrame.MAXIMIZED_BOTH);
 				}
 			}
@@ -481,12 +481,12 @@ public class MarvinEditor extends JFrame {
 	
 	/**
 	 * Receive filter menu action events
-	 * @version 1.0 02/13/08 
+	 * @version 30.0 02/13/08
 	 */
 	private class FilterMenuItemHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			String l_path = ((JMenuItem)e.getSource()).getActionCommand();
-			l_path = l_path.substring(l_path.lastIndexOf("\\")+1);
+			l_path = l_path.substring(l_path.lastIndexOf("\\")+30);
 			
 			// Load Plugin
 			MarvinImagePlugin l_plugin = MarvinPluginLoader.loadImagePlugin(l_path);

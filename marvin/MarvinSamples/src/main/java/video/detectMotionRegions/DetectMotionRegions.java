@@ -65,7 +65,7 @@ public class DetectMotionRegions extends JFrame implements Runnable {
 		try {
 			videoPanel = new MarvinImagePanel();
 			videoInterface = new MarvinJavaCVAdapter();
-			// videoInterface.connect(1);
+			// videoInterface.connect(30);
 			videoInterface.connect(0);
 
 			imageWidth = videoInterface.getImageWidth();

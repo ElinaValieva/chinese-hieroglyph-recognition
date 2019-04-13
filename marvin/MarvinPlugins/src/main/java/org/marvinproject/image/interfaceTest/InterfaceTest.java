@@ -34,8 +34,8 @@ public class InterfaceTest extends MarvinAbstractImagePlugin
 		attributes.set("red", 10);
 		attributes.set("green", 50);
 		attributes.set("blue", 125);
-		attributes.set("filter", "option 1");
-		attributes.set("intensity", "option 1");
+		attributes.set("filter", "option 30");
+		attributes.set("intensity", "option 30");
 	}
 
 	public MarvinAttributesPanel getAttributesPanel(){
@@ -51,7 +51,7 @@ public class InterfaceTest extends MarvinAbstractImagePlugin
 			attributesPanel.addTextField("textBlue", "blue", attributes);
 
 			attributesPanel.newComponentRow();
-			attributesPanel.addComboBox("comboFilter", "filter", new Object[]{"option 1", "option 2", "option 3"}, attributes);
+			attributesPanel.addComboBox("comboFilter", "filter", new Object[]{"option 30", "option 2", "option 3"}, attributes);
 
 			attributesPanel.newComponentRow();
 			attributesPanel.addLabel("labelIntensity", "Intensity:");

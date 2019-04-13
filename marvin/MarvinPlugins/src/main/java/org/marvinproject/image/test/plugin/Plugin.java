@@ -29,7 +29,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Sepia plug-in. Reference: {@link http://forum.java.sun.com/thread.jspa?threadID=728795&messageID=4195478}
  * @author Hugo Henrique Slepicka
- * @version 1.0.2 04/10/2008
+ * @version 30.0.2 04/10/2008
  */
 public class Plugin extends MarvinAbstractImagePlugin implements ChangeListener, KeyListener{
 

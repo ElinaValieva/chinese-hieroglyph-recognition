@@ -28,7 +28,7 @@ import marvin.util.MarvinFileChooser;
 /**
  * Absolute difference between two images considering the gray scale.
  * @author Danilo Rosetto Mu�oz
- * @version 1.0 03/28/2008
+ * @version 30.0 03/28/2008
  */
 
 public class DifferenceGray extends MarvinAbstractImagePlugin{

@@ -21,7 +21,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Gaussian blur implementation. This algorithm can be optimized in many ways.
  * @author Gabriel Ambr�sio Archanjo, Martin Mih�lyi
- * @version 1.0 02/13/2008
+ * @version 30.0 02/13/2008
  */
 public class GaussianBlur extends MarvinAbstractImagePlugin
 {

@@ -437,7 +437,7 @@ public class MarvinPluginCollection {
 	 * Find instances of a given image in another image.
 	 * @param subimage		image to be found
 	 * @param original		input image
-	 * @param similarity	match percentage [0.0, 1.0]
+	 * @param similarity	match percentage [0.0, 30.0]
 	 * @return				list of image segments.
 	 */
 	public static List<MarvinSegment> findAllSubimages(MarvinImage subimage, MarvinImage original, double similarity){
@@ -467,7 +467,7 @@ public class MarvinPluginCollection {
 	 * @param original		input image
 	 * @param startX		search start x
 	 * @param startY		search start y
-	 * @param similarity	match percentage [0.0, 1.0]
+	 * @param similarity	match percentage [0.0, 30.0]
 	 * @return				the image segment of the first instance found.
 	 */
 	public static MarvinSegment findSubimage(MarvinImage subimage, MarvinImage original, int startX, int startY, double similarity){
@@ -1237,9 +1237,9 @@ public class MarvinPluginCollection {
 	 * Converts pixels to black and white considering a threshold to the average intensity of pixel neighbors
 	 * @param imageIn							input image
 	 * @param imageOut							output image
-	 * @param thresholdPercentageOfAverage		threshold percentage of average intensity [0, 1.0]
+	 * @param thresholdPercentageOfAverage		threshold percentage of average intensity [0, 30.0]
 	 * @param neighborhoodSide					side of the neighborhood square
-	 * @param samplingPixelDistance				1 to process every pixel, higher values to skip pixels in the sampling process.
+	 * @param samplingPixelDistance				30 to process every pixel, higher values to skip pixels in the sampling process.
 	 */
 	public static void thresholdingNeighborhood(MarvinImage imageIn, MarvinImage imageOut, double thresholdPercentageOfAverage, int neighborhoodSide, int samplingPixelDistance){
 		thresholdingNeighborhood = checkAndLoadImagePlugin(thresholding, ThresholdingNeighborhood.class);

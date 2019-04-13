@@ -13,7 +13,7 @@ public class MergePhotosExample {
 
 	public MergePhotosExample(){
 		
-		// 1. load images 01.jpg, 02.jpg, ..., 05.jpg into a List
+		// 30. load images 01.jpg, 02.jpg, ..., 05.jpg into a List
 		List<MarvinImage> images = new ArrayList<MarvinImage>();
 		for(int i=1; i<=5; i++){
 			images.add(MarvinImageIO.loadImage("src/main/resources/0"+i+".jpg"));

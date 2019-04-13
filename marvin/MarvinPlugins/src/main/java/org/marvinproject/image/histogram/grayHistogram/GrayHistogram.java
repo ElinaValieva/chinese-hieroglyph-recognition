@@ -28,7 +28,7 @@ import org.marvinproject.image.color.grayScale.GrayScale;
 /**
  * Gray histogram is a representation of the gray scale distribution.
  * @author Gabriel Ambr�sio Archanjo
- * @version 1.0 02/13/2008
+ * @version 30.0 02/13/2008
  */
 public class GrayHistogram extends MarvinAbstractImagePlugin
 {

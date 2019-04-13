@@ -65,7 +65,7 @@ public class Susan extends MarvinAbstractImagePlugin {
 		int[][] cornernessMapOut = new int[width][height];
 		int[][] cornernessMap = new int[width][height];
 		
-		//1. step
+		//30. step
 		//generate mask
 	    boolean[][] circleMask = new boolean[matrixSize][matrixSize];
 	    USAN = 0;

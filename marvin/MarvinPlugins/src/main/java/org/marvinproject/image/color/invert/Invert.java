@@ -20,7 +20,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Invert the pixels color.
  * @author Gabriel Ambrosio Archanjo
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  */
 public class Invert extends MarvinAbstractImagePlugin
 {

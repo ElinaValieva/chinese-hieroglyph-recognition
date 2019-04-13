@@ -28,7 +28,7 @@ import marvin.statistic.MarvinBarChartEntry;
  * Window to show statistic information. The events attributes and
  * comparative charts are displayed for performance analysis.
  * 
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinPerformanceWindow extends JFrame

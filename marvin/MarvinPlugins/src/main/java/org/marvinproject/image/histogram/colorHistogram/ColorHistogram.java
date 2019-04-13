@@ -25,7 +25,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Color histogram is a representation of the RGB colors distribution.
  * @author Gabriel Ambr�sio Archanjo
- * @version 1.0 02/13/2008
+ * @version 30.0 02/13/2008
  */
 public class ColorHistogram extends MarvinAbstractImagePlugin
 {

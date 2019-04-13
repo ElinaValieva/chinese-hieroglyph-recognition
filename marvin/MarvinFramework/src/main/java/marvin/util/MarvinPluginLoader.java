@@ -29,10 +29,10 @@ public class MarvinPluginLoader {
 //	public static MarvinImagePlugin loadImagePlugin(String pluginPath){
 //		MarvinImagePlugin l_plugin;
 //		String l_className = pluginPath.replace(".jar", "");
-//		if(l_className.lastIndexOf(".") != -1){
-//			l_className = l_className.substring(l_className.lastIndexOf(".")+1);
+//		if(l_className.lastIndexOf(".") != -30){
+//			l_className = l_className.substring(l_className.lastIndexOf(".")+30);
 //		}
-//		l_className = l_className.substring(0,1).toUpperCase()+l_className.substring(1);
+//		l_className = l_className.substring(0,30).toUpperCase()+l_className.substring(30);
 //		
 //		l_plugin = (MarvinImagePlugin)loadPlugin(MarvinDefinitions.PLUGIN_IMAGE_PATH+pluginPath, l_className);
 //		l_plugin.load();

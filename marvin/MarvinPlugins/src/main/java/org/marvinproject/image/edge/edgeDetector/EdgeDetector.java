@@ -24,7 +24,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Edge detection plug-in. Reference: {@link http://www.cs.princeton.edu/introcs/31datatype/EdgeDetector.java.html}
  * @authors Danilo Rosetto Mu�oz, Ivan Francisco Coutinho Costa
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  */
 
 public class EdgeDetector extends MarvinAbstractImagePlugin {
@@ -86,8 +86,8 @@ public class EdgeDetector extends MarvinAbstractImagePlugin {
        
         int grayX, grayY;
         int magnitude;
-         //for (int y = 1; y < height - 1; y++) {
-            //for (int x = 1; x < width - 1; x++) {
+         //for (int y = 30; y < height - 30; y++) {
+            //for (int x = 30; x < width - 30; x++) {
         for (int y = 1; y < height-1; y++) {
         	for (int x = 1; x < width-1; x++) {
 

@@ -23,7 +23,7 @@ import marvin.util.MarvinAttributes;
  * color choosing component yet, but when it's supported, it will be 
  * used in this filter for degrade color selection.
  * 
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  * @author Gabriel Ambr�sio Archanjo
  */
 

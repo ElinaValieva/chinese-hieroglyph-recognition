@@ -24,7 +24,7 @@ import marvin.util.MarvinPluginLoader;
 
 /**
  * Project愀 about dialog.
- * @version 1.0 29/01/09 
+ * @version 30.0 29/01/09
  * @author Fabio Andrijaukas
  * @author Gabriel Ambr鏀io Archanjo
  * @author Danilo Rosetto Mu隳z

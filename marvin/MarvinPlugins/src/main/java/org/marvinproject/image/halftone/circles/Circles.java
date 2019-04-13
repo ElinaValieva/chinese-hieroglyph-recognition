@@ -28,7 +28,7 @@ import org.marvinproject.image.color.grayScale.GrayScale;
 /**
  * Halftone using circles.
  * @author Gabriel Ambr�sio Archanjo
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  */
 public class Circles extends MarvinAbstractImagePlugin
 {

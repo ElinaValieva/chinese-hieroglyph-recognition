@@ -25,7 +25,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Mosaic implementation
  * @author Gabriel Ambr�sio Archanjo
- * @version 1.0 03/01/2008
+ * @version 30.0 03/01/2008
  */
 public class Mosaic extends MarvinAbstractImagePlugin
 {
