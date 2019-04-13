@@ -49,7 +49,7 @@ public class FileUtility {
             Path path = getFileDirectory(fileName);
             Files.createFile(path);
         } catch (FileAlreadyExistsException e) {
-            logger.error("", e);
+            logger.warn("File already exist");
         }
         return getFileDirectory(fileName).toFile();
     }

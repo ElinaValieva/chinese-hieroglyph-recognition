@@ -17,6 +17,7 @@ import marvin.math.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,37 +36,32 @@ import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 @Service
 public class SegmentationService {
 
-    private final FileUtility fileManagerService;
+    private final FileUtility fileUtility;
     private final ImageUtility imageUtility;
     private final RecognitionModelMapUtility recognitionModelMapUtility;
 
     private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
 
     @Autowired
-    public SegmentationService(FileUtility fileManagerService,
+    public SegmentationService(FileUtility fileUtility,
                                ImageUtility imageUtility,
                                RecognitionModelMapUtility recognitionModelMapUtility) {
-        this.fileManagerService = fileManagerService;
+        this.fileUtility = fileUtility;
         this.imageUtility = imageUtility;
         this.recognitionModelMapUtility = recognitionModelMapUtility;
     }
 
     public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException {
         log.debug("Start segmenting process for image: {}", imagePath);
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = recognitionModelMapUtility.mapToModel(imagePath);
+        hieroglyphRecognitionModels = new ArrayList<>();
+
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
 
         if (loadImage == null)
             throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
 
-        HieroglyphRecognitionModel hieroglyphRecognitionModel = recognitionModelMapUtility.mapToModel(imagePath);
-        hieroglyphRecognitionModels = new ArrayList<>();
-
-        MarvinImage image = loadImage.clone();
-        filterGreen(image);
-        MarvinImage marvinImage = MarvinColorModelConverter.rgbToBinary(image, THRESHOLD);
-        morphologicalClosing(marvinImage.clone(), marvinImage, MarvinMath.getTrueMatrix(MATRIX_ROW_SIZE_X, MATRIX_ROW_SIZE_Y));
-        image = MarvinColorModelConverter.binaryToRgb(marvinImage);
-        MarvinSegment[] segments = floodfillSegmentation(image);
+        MarvinSegment[] segments = createSegments(loadImage);
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
@@ -75,8 +71,54 @@ public class SegmentationService {
             }
         });
 
-        MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
+        MarvinImageIO.saveImage(loadImage, fileUtility.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
+        saveResults(hieroglyphRecognitionModels);
         return hieroglyphRecognitionModels;
+    }
+
+    private MarvinSegment[] createSegments(MarvinImage loadImage) {
+        MarvinImage image = loadImage.clone();
+        filterGreen(image);
+        MarvinImage marvinImage = MarvinColorModelConverter.rgbToBinary(image, THRESHOLD);
+        morphologicalClosing(marvinImage.clone(), marvinImage, MarvinMath.getTrueMatrix(MATRIX_ROW_SIZE_X, MATRIX_ROW_SIZE_Y));
+        image = MarvinColorModelConverter.binaryToRgb(marvinImage);
+        return floodfillSegmentation(image);
+    }
+
+    private void clearSegments(List<HieroglyphRecognitionModel> hieroglyphRecognitionModels) {
+        hieroglyphRecognitionModels.forEach(this::clearSegment);
+    }
+
+    private void clearSegment(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
+        String path = fileUtility.getFilesPath(String.format("static/file-repository/%s", hieroglyphRecognitionModel.getPath()));
+        MarvinImage loadImage = MarvinImageIO.loadImage(path);
+
+        MarvinSegment[] segments = createSegments(loadImage);
+
+        if (segments == null)
+            return;
+
+        if (segments.length > 1)
+            IntStream.range(1, segments.length).forEach(segmentIndex ->
+                    clearSegmentArea(hieroglyphRecognitionModel, segments[segmentIndex]));
+
+    }
+
+    private void clearSegmentArea(HieroglyphRecognitionModel model, MarvinSegment marvinSegment) {
+        if (!checkForAvailableArea(marvinSegment))
+            return;
+
+        int[][] resizingVector = imageUtility.resizeVector(model, marvinSegment);
+
+        if (!checkForEmptyArea(resizingVector))
+            return;
+
+        int[][] vector = model.getVector();
+        Point pointStart = new Point(marvinSegment.x1, marvinSegment.y1);
+        Point pointEnd = new Point(marvinSegment.x2, marvinSegment.y2);
+        removeArea(vector, pointStart, pointEnd);
+        HieroglyphRecognitionModel.builder(model)
+                .vector(vector);
     }
 
     private void removeArea(int[][] vector, Point start, Point end) {
@@ -84,6 +126,8 @@ public class SegmentationService {
         int xEnd = xStart + end.x + 1;
         int yStart = start.y;
         int yEnd = yStart + end.y + 1;
+        if (vector.length <= yEnd || vector[0].length <= xEnd)
+            return;
         IntStream.range(yStart, yEnd).forEach(height ->
                 IntStream.range(xStart, xEnd).forEach(width -> vector[height][width] = 0));
     }
@@ -149,10 +193,19 @@ public class SegmentationService {
         int[] resultList = new int[height];
         int thresholdHeight = Math.toIntExact(Math.round(height * 0.5));
         IntStream.range(0, height).forEach(heightIndex ->
-                resultList[heightIndex] = Arrays.stream(vector[heightIndex]).max().getAsInt()
-        );
+                resultList[heightIndex] = Arrays.stream(vector[heightIndex]).max().getAsInt());
 
         long cntEmptyElement = Arrays.stream(resultList).filter(element -> element == 0).count();
         return cntEmptyElement < thresholdHeight;
+    }
+
+    private void saveResults(List<HieroglyphRecognitionModel> hieroglyphRecognitionModels) {
+        hieroglyphRecognitionModels.forEach(hieroglyphRecognitionModel -> {
+            try {
+                fileUtility.createImage(hieroglyphRecognitionModel.getBufferedImage(), hieroglyphRecognitionModel.getPath());
+            } catch (IOException e) {
+                log.warn("File already defined. Override existing.");
+            }
+        });
     }
 }
