@@ -81,9 +81,9 @@ public class SegmentationService {
 
     private void removeArea(int[][] vector, Point start, Point end) {
         int xStart = start.x;
-        int xEnd = xStart + end.x;
+        int xEnd = xStart + end.x + 1;
         int yStart = start.y;
-        int yEnd = yStart + end.y;
+        int yEnd = yStart + end.y + 1;
         IntStream.range(yStart, yEnd).forEach(height ->
                 IntStream.range(xStart, xEnd).forEach(width -> vector[height][width] = 0));
     }
