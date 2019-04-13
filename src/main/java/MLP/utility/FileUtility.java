@@ -1,6 +1,7 @@
 package MLP.utility;
 
 import MLP.configuration.StorageProperty;
+import MLP.services.recognition.resourcesService.ResourcesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,11 @@ public class FileUtility {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
         return file.getPath();
+    }
+
+    public String getFilesPath(String fileName) {
+        File file = new File(ResourcesService.class.getClassLoader().getResource(fileName).getFile());
+        return file.getAbsolutePath();
+
     }
 }
