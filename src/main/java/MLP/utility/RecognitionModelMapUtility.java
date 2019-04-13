@@ -29,6 +29,7 @@ public class RecognitionModelMapUtility {
                 .bufferedImage(bufferedImage)
                 .vector(imageVector)
                 .height(height)
+                .path(path)
                 .width(width)
                 .build();
     }
@@ -37,15 +38,17 @@ public class RecognitionModelMapUtility {
         BufferedImage bufferedImage = imageUtility.vectorToImage(vector);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
+        String path = PathGenerator.getPath();
         return HieroglyphRecognitionModel.builder()
                 .bufferedImage(bufferedImage)
                 .vector(vector)
                 .height(height)
+                .path(path)
                 .width(width)
                 .build();
     }
 
-    public void mapToModel(HieroglyphRecognitionModel hieroglyphRecognitionModel, int[][] vector, BufferedImage bufferedImage, int width, int height) {
+    void mapToModel(HieroglyphRecognitionModel hieroglyphRecognitionModel, int[][] vector, BufferedImage bufferedImage, int width, int height) {
         HieroglyphRecognitionModel.builder(hieroglyphRecognitionModel)
                 .bufferedImage(bufferedImage)
                 .vector(vector)

@@ -32,6 +32,7 @@ public class HRService {
     public List<HieroglyphRecognitionModel> recognize(String imagePath) throws IOException, RecognitionException {
         filterService.filter(imagePath);
         List<HieroglyphRecognitionModel> segmentedHieroglyphs = segmentationService.segment(imagePath);
+        resizeUtility.resizeHieroglyphs(segmentedHieroglyphs);
         return segmentedHieroglyphs;
     }
 }
