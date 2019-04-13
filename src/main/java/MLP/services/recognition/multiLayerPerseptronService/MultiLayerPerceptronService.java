@@ -31,9 +31,9 @@ public class MultiLayerPerceptronService implements IMultiLayerPerceptronService
 
 
     @Override
-    public Double[] execute(Double[] input) {
+    public double[] execute(double[] input) {
         final double[] newValue = new double[1];
-        Double[] output = new Double[fLayers[fLayers.length - 1].length];
+        double[] output = new double[fLayers[fLayers.length - 1].length];
         IntStream.range(0, fLayers[0].length)
                 .forEach(i ->
                         fLayers[0].neurons[i].value = input[i]
@@ -65,8 +65,8 @@ public class MultiLayerPerceptronService implements IMultiLayerPerceptronService
 
 
     @Override
-    public double backPropagate(Double[] input, Double[] output) {
-        Double[] newOutput = execute(input);
+    public double backPropagate(double[] input, double[] output) {
+        double[] newOutput = execute(input);
         final double[] error = new double[1];
 
         IntStream.range(0, fLayers[fLayers.length - 1].length)
