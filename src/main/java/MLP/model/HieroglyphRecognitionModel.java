@@ -1,13 +1,13 @@
 package MLP.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.awt.image.BufferedImage;
 
 /**
  * author: ElinaValieva on 06.04.2019
  * Model for presenting recognition hieroglyph
+ *
  * @value vector - pixels representing
  * @value bufferedImage - image representing
  * @value definition - chiness translation
@@ -15,7 +15,8 @@ import java.awt.image.BufferedImage;
  * @value height - height image
  */
 @Data
-@Builder
+@NoArgsConstructor
+@Setter(value = AccessLevel.PRIVATE)
 public class HieroglyphRecognitionModel {
 
     private int width;
@@ -26,5 +27,45 @@ public class HieroglyphRecognitionModel {
 
     private BufferedImage bufferedImage;
 
-    private String definition;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder builder(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
+        return new Builder(hieroglyphRecognitionModel);
+    }
+
+    @AllArgsConstructor
+    public static class Builder {
+
+        private HieroglyphRecognitionModel hieroglyphRecognitionModel;
+
+        public Builder() {
+            hieroglyphRecognitionModel = new HieroglyphRecognitionModel();
+        }
+
+        public Builder width(int width) {
+            hieroglyphRecognitionModel.setWidth(width);
+            return this;
+        }
+
+        public Builder height(int height) {
+            hieroglyphRecognitionModel.setHeight(height);
+            return this;
+        }
+
+        public Builder vector(int[][] vector) {
+            hieroglyphRecognitionModel.setVector(vector);
+            return this;
+        }
+
+        public Builder bufferedImage(BufferedImage bufferedImage) {
+            hieroglyphRecognitionModel.setBufferedImage(bufferedImage);
+            return this;
+        }
+
+        public HieroglyphRecognitionModel build() {
+            return hieroglyphRecognitionModel;
+        }
+    }
 }
