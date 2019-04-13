@@ -71,7 +71,12 @@ public class ImageUtility {
         return bufferedImage;
     }
 
-    public BufferedImage getImage(String path) throws IOException {
-        return ImageIO.read(new File(path));
+    public BufferedImage getImage(String path) {
+        try {
+            return ImageIO.read(new File(path));
+        } catch (IOException e) {
+            log.error("", e);
+            return null;
+        }
     }
 }
