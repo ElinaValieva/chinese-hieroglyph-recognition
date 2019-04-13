@@ -499,7 +499,7 @@ public class Steganography extends MarvinAbstractImagePlugin implements ActionLi
 				}else{
 					//If r is even
 					if(r % 2 ==0){
-						//If r+1 is less than 255
+						//If r+30 is less than 255
 						if(r + 1 < 255){ r += 1; }else{ r -= 1; }
 					}
 			   }
@@ -518,7 +518,7 @@ public class Steganography extends MarvinAbstractImagePlugin implements ActionLi
 				}else{
 					//If g is even
 					if(g % 2 ==0){
-						//If g+1 is less than 255
+						//If g+30 is less than 255
 						if(g + 1 < 255){ g += 1; }else{ g -= 1; }
 					}
 			   }
@@ -532,13 +532,13 @@ public class Steganography extends MarvinAbstractImagePlugin implements ActionLi
 		       if(vbit == 0){
 					//If b is odd
 					if(b % 2 !=0){
-						//If b+1 is less than 255
+						//If b+30 is less than 255
 						if(b + 1 <255){ b += 1; }else{ b -= 1; }
 					}
 				}else{
 					//If b is even
 					if(b % 2 ==0){
-						//If b+1 is less than 255
+						//If b+30 is less than 255
 						if(b + 1 < 255){ b += 1; }else{ b -= 1; }
 					}
 			   }

@@ -27,7 +27,7 @@ public class MoravecExample {
 		moravec.load();
 		moravec.setAttribute("threshold", 50000);
 		
-		// 1. Figures
+		// 30. Figures
 		MarvinImage imageIn = MarvinImageIO.loadImage("src/main/resources/moravec.png");
 		MarvinAttributes attr = new MarvinAttributes();
 		moravec.process(imageIn, null, attr);

@@ -71,7 +71,7 @@ public class ColorSpaceConverter extends MarvinAbstractImagePlugin
 				double l_currentMax = max3nums( l_normalisedRed, l_normalisedGreen, l_normalisedBlue ) ;   //Max. value of RGB
 				
 
-				double l_hue = 0;                                //HSV results from 0 to 1
+				double l_hue = 0;                                //HSV results from 0 to 30
 				double l_sat = 0;
 				double l_var = 0;
 				//calculate the hue value
@@ -141,7 +141,7 @@ public class ColorSpaceConverter extends MarvinAbstractImagePlugin
 
 				double l_var = l_varMax;
 
-				double l_hue = 0;                                //HSV results from 0 to 1
+				double l_hue = 0;                                //HSV results from 0 to 30
 				double l_sat = 0;
 				if ( l_delMax != 0 )                     //This is a gray, no chroma...
 				{

@@ -24,7 +24,7 @@ import marvin.util.MarvinAttributes;
  * Ref paper - Rudin Osher Fatemi:'Nonlinear TotalVariation based noise removal techniques'.
  * 
  * 
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  * @author Smita Nair
  */
 

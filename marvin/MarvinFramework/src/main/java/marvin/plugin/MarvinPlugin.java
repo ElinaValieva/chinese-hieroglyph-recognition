@@ -17,7 +17,7 @@ import marvin.util.MarvinAttributes;
  * Generic Marvin Plug-in. All application plug-ins must be implement this interface. Currently,
  * it愀 empty because Marvin suports only one type of plug-in. Nevertheless, different types of
  * plug-ins are expected.
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  */
 public interface MarvinPlugin{
 	

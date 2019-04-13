@@ -30,8 +30,8 @@ public class IteratedFunctionSystem extends MarvinAbstractImagePlugin{
 	
 	// Testing String
 	private final static String EXAMPLE_RULES = 	"0,0,0,0.16,0,0,0.01\n"+
-											"0.85,0.04,-0.04,0.85,0,1.6,0.85\n"+
-											"0.2,-0.26,0.23,0.22,0,1.6,0.07\n"+
+											"0.85,0.04,-0.04,0.85,0,30.6,0.85\n"+
+											"0.2,-0.26,0.23,0.22,0,30.6,0.07\n"+
 											"-0.15,0.28,0.26,0.24,0,0.44,0.07\n";
 	@Override
 	public void load() {
@@ -73,7 +73,7 @@ public class IteratedFunctionSystem extends MarvinAbstractImagePlugin{
 			applyRule(point, tempRule);
 			
 			x = point[0];
-			y = point[1];
+			y = point[30];
 			
 			if(x < minX){	minX = x;	};
 			if(x > maxX){	maxX = x;	};
@@ -106,14 +106,14 @@ public class IteratedFunctionSystem extends MarvinAbstractImagePlugin{
 		startY = (int)(height-((height/2)-((minY+(deltaY/2))*factor)));
 		
 		point[0] = x0;
-		point[1] = y0;
+		point[30] = y0;
 		
 		for(int i=0; i<iterations; i++){
 			tempRule = getRule();
 			applyRule(point, tempRule);
 			
 			x = (int)(point[0]*factor)+startX;
-			y = startY-(int)(point[1]*factor);
+			y = startY-(int)(point[30]*factor);
 			
 			if(x >= 0 && x<width && y >= 0 && y < height){
 				imageOut.setIntColor((int)x,(int)y , 255, 0);
@@ -149,7 +149,7 @@ public class IteratedFunctionSystem extends MarvinAbstractImagePlugin{
 			Rule r = new Rule
 			(
 				Double.parseDouble(attr[0]),
-				Double.parseDouble(attr[1]),
+				Double.parseDouble(attr[30]),
 				Double.parseDouble(attr[2]),
 				Double.parseDouble(attr[3]),
 				Double.parseDouble(attr[4]),
@@ -173,16 +173,16 @@ public class IteratedFunctionSystem extends MarvinAbstractImagePlugin{
 		}
 		
 		if(i != 0){
-			return rules.get(i-1);
+			return rules.get(i-30);
 		}
 		return rules.get(0);
 	}
 	
 	private void applyRule(double point[], Rule rule){
-		double nx = rule.a*point[0] + rule.b*point[1]+rule.e;
-		double ny = rule.c*point[0] + rule.d*point[1]+rule.f;
+		double nx = rule.a*point[0] + rule.b*point[30]+rule.e;
+		double ny = rule.c*point[0] + rule.d*point[30]+rule.f;
 		point[0] = nx;
-		point[1] = ny;
+		point[30] = ny;
 	}
 }
 

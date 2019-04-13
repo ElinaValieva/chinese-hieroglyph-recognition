@@ -7,17 +7,16 @@ import MLP.model.HieroglyphRecognitionModel;
 import MLP.utility.FileUtility;
 import MLP.utility.ImageUtility;
 import MLP.utility.RecognitionModelMapUtility;
-import MLP.utility.ResizeUtility;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
 import marvin.image.MarvinSegment;
 import marvin.io.MarvinImageIO;
 import marvin.math.MarvinMath;
+import marvin.math.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,22 +38,19 @@ public class SegmentationService {
     private final FileUtility fileManagerService;
     private final ImageUtility imageUtility;
     private final RecognitionModelMapUtility recognitionModelMapUtility;
-    private final ResizeUtility resizeUtility;
 
     private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
 
     @Autowired
     public SegmentationService(FileUtility fileManagerService,
                                ImageUtility imageUtility,
-                               RecognitionModelMapUtility recognitionModelMapUtility,
-                               ResizeUtility resizeUtility) {
+                               RecognitionModelMapUtility recognitionModelMapUtility) {
         this.fileManagerService = fileManagerService;
         this.imageUtility = imageUtility;
         this.recognitionModelMapUtility = recognitionModelMapUtility;
-        this.resizeUtility = resizeUtility;
     }
 
-    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
+    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException {
         log.debug("Start segmenting process for image: {}", imagePath);
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
 
@@ -73,11 +69,54 @@ public class SegmentationService {
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
-            formResult(hieroglyphRecognitionModel, segmentResult, loadImage);
+            if (i < (segments.length - 1)) {
+                MarvinSegment segmentResultInnerElement = segments[i + 1];
+                formResult(segmentResult, segmentResultInnerElement, hieroglyphRecognitionModel, loadImage);
+            }
         });
 
         MarvinImageIO.saveImage(loadImage, fileManagerService.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
         return hieroglyphRecognitionModels;
+    }
+
+    private void removeArea(int[][] vector, Point start, Point end) {
+        int xStart = start.x;
+        int xEnd = xStart + end.x + 1;
+        int yStart = start.y;
+        int yEnd = yStart + end.y + 1;
+        IntStream.range(yStart, yEnd).forEach(height ->
+                IntStream.range(xStart, xEnd).forEach(width -> vector[height][width] = 0));
+    }
+
+    private void formResult(MarvinSegment marvinSegment, MarvinSegment marvinSegmentInnerElement, HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinImage marvinImage) {
+        int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegment);
+        int[][] resizingVectorForInnerElement = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
+
+        if (isIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
+            Point start = new Point(marvinSegmentInnerElement.x1 - marvinSegment.x1, marvinSegmentInnerElement.y1 - marvinSegment.y1);
+            Point end = new Point(marvinSegmentInnerElement.x2 - marvinSegmentInnerElement.x1, marvinSegmentInnerElement.y2 - marvinSegmentInnerElement.y1);
+            removeArea(resizingVector, start, end);
+        }
+
+        formResult(resizingVector, marvinSegment, marvinImage);
+        formResult(resizingVectorForInnerElement, marvinSegment, marvinImage);
+    }
+
+
+    private boolean isIntersect(MarvinSegment marvinSegment, MarvinSegment marvinSegmentSecond, int[][] resizingVector, int[][] resingVectorSecond) {
+        if (!checkForAvailableArea(marvinSegment) || !checkForAvailableArea(marvinSegmentSecond))
+            return false;
+
+        if (!checkForEmptyArea(resizingVector) || !checkForEmptyArea(resingVectorSecond))
+            return false;
+
+        Point pointAStart = new Point(marvinSegment.x1, marvinSegment.y1);
+        Point pointAEnd = new Point(marvinSegment.x2, marvinSegment.y2);
+        Point pointBStart = new Point(marvinSegmentSecond.x1, marvinSegmentSecond.y1);
+        Point pointBEnd = new Point(marvinSegmentSecond.x2, marvinSegmentSecond.y2);
+        return ((pointBStart.x <= pointAStart.x && pointAStart.x <= pointBEnd.x) || (pointAStart.x <= pointBStart.x && pointBStart.x <= pointAEnd.x))
+                &&
+                ((pointBStart.y <= pointAStart.y && pointAStart.y <= pointBEnd.y) || (pointAStart.y <= pointBStart.y && pointBStart.y <= pointAEnd.y));
     }
 
     private void filterGreen(MarvinImage image) {
@@ -92,26 +131,20 @@ public class SegmentationService {
         );
     }
 
-    private boolean isAvailable(MarvinSegment marvinSegment) {
+    private boolean checkForAvailableArea(MarvinSegment marvinSegment) {
         return marvinSegment.area > THRESHOLD_FOR_RESING;
     }
 
-    private void formResult(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment segmentResult, MarvinImage loadImage) {
-        if (!isAvailable(segmentResult))
+    private void formResult(int[][] resizingVector, MarvinSegment segmentResult, MarvinImage loadImage) {
+        if (!checkForAvailableArea(segmentResult) || !checkForEmptyArea(resizingVector))
             return;
 
-        int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, segmentResult);
-
-        if (!isNotEmptyImage(resizingVector))
-            return;
-
-        resizingVector = resizeUtility.resize(resizingVector);
         HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = recognitionModelMapUtility.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
         loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
     }
 
-    private boolean isNotEmptyImage(int[][] vector) {
+    private boolean checkForEmptyArea(int[][] vector) {
         int height = vector.length;
         int[] resultList = new int[height];
         int thresholdHeight = Math.toIntExact(Math.round(height * 0.5));

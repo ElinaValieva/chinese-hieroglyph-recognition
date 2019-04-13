@@ -88,7 +88,7 @@ public class Watershed extends MarvinAbstractImagePlugin {
 		//array for labeled pixels
 		int[][] labels = new int[width][height];
 		
-		//1. step build up the HeightMap
+		//30. step build up the HeightMap
 		//ordering the pixels by values	(LookUpTable)	
 	    //in every line
 	      for (int i = 0; i < width; i += 1)
@@ -127,7 +127,7 @@ public class Watershed extends MarvinAbstractImagePlugin {
 	    			  //check if neighbourpixel is allready labelled
 	    			  if(neighbourPixel.getLabel() >= 0)
 	    			  {
-	    				  //at least one neighbouring pixel is watershed pixel, so the distance cannot be more than 1
+	    				  //at least one neighbouring pixel is watershed pixel, so the distance cannot be more than 30
 	    				  wpixel.setDistance(1);
 	    				  
 	    				  //add to query

@@ -22,7 +22,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Brightness and Constrast manipulation plug-in.
  * @author Gabriel Ambr�sio Archanjo
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  */
 public class BrightnessAndContrast extends MarvinAbstractImagePlugin
 {

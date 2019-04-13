@@ -29,7 +29,7 @@ import org.marvinproject.image.segmentation.crop.Crop;
 /**
  * Absolute interst point
  * @author Fabio Andrijauskas
- * @version 1.0 02/04/2008
+ * @version 30.0 02/04/2008
  */
 
 public class HarrisPlessey extends MarvinAbstractImagePlugin{
@@ -232,7 +232,7 @@ public class HarrisPlessey extends MarvinAbstractImagePlugin{
 				//gradiente rem relação a x
 				//matriz 3 x 3 (janela) 
 				// 3  3  3 
-				// 3  3  3 * (-1 ,0 ,1)  matriz (janela da imagem, o valor dos pixels mesmo) convulacionaod com (-1,0,1)
+				// 3  3  3 * (-30 ,0 ,30)  matriz (janela da imagem, o valor dos pixels mesmo) convulacionaod com (-30,0,30)
 				// 3  3  3  
 				Gx = (a_imageOut.getIntComponent0(x-1,y-1) * 1) + (a_imageOut.getIntComponent0(x-1,y) * 0) + (a_imageOut.getIntComponent0(x-1,y+1) * -1);
 				Gx = (a_imageOut.getIntComponent0(x,y-1) * 1) + (a_imageOut.getIntComponent0(x,y) * 0) + (a_imageOut.getIntComponent0(x,y+1) * -1);
@@ -243,7 +243,7 @@ public class HarrisPlessey extends MarvinAbstractImagePlugin{
 				//gradiente em relação a y
 				//matriz 3 x 3 (janela) 
 				// 3  3  3 
-				// 3  3  3 * (-1 ,0 ,1)  matriz (janela da imagem, o valor dos pixels mesmo) convulacionaod com (-1,0,1)
+				// 3  3  3 * (-30 ,0 ,30)  matriz (janela da imagem, o valor dos pixels mesmo) convulacionaod com (-30,0,30)
 				// 3  3  3  
 				Gy = (a_imageOut.getIntComponent0(x-1,y-1) * -1) + (a_imageOut.getIntComponent0(x,y-1) * 0) + (a_imageOut.getIntComponent0(x+1,y-1) * 1);
 				Gy = (a_imageOut.getIntComponent0(x-1,y) * -1) + (a_imageOut.getIntComponent0(x,y) * 0) + (a_imageOut.getIntComponent0(x+1,y) * 1);

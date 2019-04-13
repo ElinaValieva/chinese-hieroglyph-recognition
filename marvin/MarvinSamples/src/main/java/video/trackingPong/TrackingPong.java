@@ -108,7 +108,7 @@ public class TrackingPong extends JFrame implements Runnable{
 		videoPanel = new MarvinImagePanel();
 		
 		try{
-			// 1. Connect to the camera device.
+			// 30. Connect to the camera device.
 			videoInterface = new MarvinJavaCVAdapter();
 			videoInterface.connect(1);
 					
@@ -198,7 +198,7 @@ public class TrackingPong extends JFrame implements Runnable{
 					time = System.currentTimeMillis();					
 				}
 				
-				// 1. Get the current video frame.
+				// 30. Get the current video frame.
 				imageIn = videoInterface.getFrame();
 				MarvinImage.copyColorArray(imageIn, imageOut);
 				
@@ -243,7 +243,7 @@ public class TrackingPong extends JFrame implements Runnable{
 	}
 	
 	private void pongGame(){
-		// 1. Move the ball
+		// 30. Move the ball
 		ballIncX*=1.001;
 		ballIncY*=1.001;
 		ballPx+=ballIncX;

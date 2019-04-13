@@ -100,7 +100,7 @@ public class VideoFilters extends JFrame implements Runnable{
 	public VideoFilters(){
 		try{
 			videoInterface = new MarvinJavaCVAdapter();
-			// videoInterface.connect(1);
+			// videoInterface.connect(30);
 			videoInterface.connect(0); // on Mac
 			
 			videoPanel = new MarvinImagePanel();

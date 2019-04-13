@@ -41,7 +41,7 @@ import marvin.util.MarvinAttributes;
  * Generic Window for plug-ins. This window supports integrating Swing components 
  * with MarvinAttributes. Components events are automatically handled.
  *
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinPluginWindow extends JFrame

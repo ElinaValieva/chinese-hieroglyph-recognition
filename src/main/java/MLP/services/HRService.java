@@ -1,12 +1,15 @@
 package MLP.services;
 
 import MLP.exception.RecognitionException;
+import MLP.model.HieroglyphRecognitionModel;
 import MLP.services.preprocessing.FilterService;
 import MLP.services.segmentation.SegmentationService;
+import MLP.utility.ResizeUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * author: ElinaValieva on 07.04.2019
@@ -17,15 +20,18 @@ public class HRService {
 
     private final FilterService filterService;
     private final SegmentationService segmentationService;
+    private final ResizeUtility resizeUtility;
 
     @Autowired
-    public HRService(FilterService filterService, SegmentationService segmentationService) {
+    public HRService(FilterService filterService, SegmentationService segmentationService, ResizeUtility resizeUtility) {
         this.filterService = filterService;
         this.segmentationService = segmentationService;
+        this.resizeUtility = resizeUtility;
     }
 
-    public void recognize(String imagePath) throws IOException, RecognitionException {
+    public List<HieroglyphRecognitionModel> recognize(String imagePath) throws IOException, RecognitionException {
         filterService.filter(imagePath);
-        segmentationService.segment(imagePath);
+        List<HieroglyphRecognitionModel> segmentedHieroglyphs = segmentationService.segment(imagePath);
+        return segmentedHieroglyphs;
     }
 }

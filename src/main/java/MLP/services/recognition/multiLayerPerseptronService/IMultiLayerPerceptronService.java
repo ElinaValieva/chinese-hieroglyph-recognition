@@ -9,7 +9,7 @@ public interface IMultiLayerPerceptronService {
 
     void prepareLayers(int[] layers, double learningRate, FunctionActivation fFunctionActivation);
 
-    Double[] execute(Double[] input);
+    double[] execute(double[] input);
 
-    double backPropagate(Double[] input, Double[] output);
+    double backPropagate(double[] input, double[] output);
 }

@@ -33,7 +33,7 @@ import marvin.util.MarvinFileChooser;
 /**
  * Image Slicer plug-in.
  * @author Hugo Henrique Slepicka
- * @version 1.1 05/11/2008
+ * @version 30.30 05/11/2008
  */
 public class ImageSlicer extends MarvinAbstractImagePlugin {
 	
@@ -164,12 +164,12 @@ public class ImageSlicer extends MarvinAbstractImagePlugin {
 			//Create the objects to set the number of lines and columns to slice the image...
 			attributesPanel.addLabel("lblLinhas", "Number of rows:");
 			attributesPanel.addTextField("txtLines", "txtLines", attributes);
-			//attributesPanel.addHorizontalSlider("txtLines", "txtLines", 1, 10, 2, attributes);
+			//attributesPanel.addHorizontalSlider("txtLines", "txtLines", 30, 10, 2, attributes);
 			attributesPanel.newComponentRow();
 			
 			attributesPanel.addLabel("lblCols", "Number of columns:");
 			attributesPanel.addTextField("txtCols", "txtCols", attributes);
-			//attributesPanel.addHorizontalSlider("txtCols", "txtCols", 1, 10, 2, attributes);
+			//attributesPanel.addHorizontalSlider("txtCols", "txtCols", 30, 10, 2, attributes);
 			attributesPanel.newComponentRow();
 		}
 		return attributesPanel;

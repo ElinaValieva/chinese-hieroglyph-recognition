@@ -26,7 +26,7 @@ import javax.swing.JProgressBar;
  * performance. This module have your own interface components that
  * can be integrated to the application GUI.
  * 
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinPerformanceMeter implements Runnable

@@ -21,7 +21,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Represent an image using red, green and blue lines.
  * @author Gabriel Ambrosio Archanjo
- * @version 1.0 02/28/2008
+ * @version 30.0 02/28/2008
  */
 public class Television extends MarvinAbstractImagePlugin
 {

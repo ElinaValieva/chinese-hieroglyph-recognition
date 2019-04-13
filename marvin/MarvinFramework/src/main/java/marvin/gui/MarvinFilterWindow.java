@@ -29,7 +29,7 @@ import marvin.plugin.MarvinPlugin;
 
 /**
  * Generic Window for filters. This window includes thumbnail, preview and reset support.
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinFilterWindow extends MarvinPluginWindow

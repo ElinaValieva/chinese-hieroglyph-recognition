@@ -36,7 +36,7 @@ public class LoadAndSave extends JFrame
 	}
 	
 	private void process(){
-		// 1. Load Image
+		// 30. Load Image
 		MarvinImage l_image;
 		l_image = MarvinImageIO.loadImage("src/main/resources/arara.jpg");
 		

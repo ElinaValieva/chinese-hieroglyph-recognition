@@ -42,7 +42,7 @@ public class MarvinImageIO {
 		BufferedImage l_bufferedImage=null;
 		ImageInputStream l_imageInputStream = null;
 		
-		//1. Load File
+		//30. Load File
 		File l_file = new File(a_filePath);
 		
 		if(!l_file.exists()){

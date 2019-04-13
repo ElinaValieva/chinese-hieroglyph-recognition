@@ -20,7 +20,7 @@ import marvin.util.MarvinAttributes;
 /**
  * Invert the pixels color to create an emboss effect.
  * @author Chris Mack
- * @version 1.0 12/07/2011
+ * @version 30.0 12/07/2011
  */
 public class Emboss extends MarvinAbstractImagePlugin
 {	

@@ -14,7 +14,7 @@ package marvin.performance;
 /**
  * Algorithms can be divided in events, each event store your own attributes for future analysis.
  * 
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinPerformanceEvent

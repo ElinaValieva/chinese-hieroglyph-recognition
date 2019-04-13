@@ -62,7 +62,7 @@ public class Harris extends MarvinAbstractImagePlugin {
 		//array for founded corners
 		int[][] cornernessMapOut = new int[width][height];
 		
-		//1.step
+		//30.step
 		//calculate diffx, diffy, diffxy
 		double diffx[][] = new double[width][height];
 		double diffy[][] = new double[width][height];			

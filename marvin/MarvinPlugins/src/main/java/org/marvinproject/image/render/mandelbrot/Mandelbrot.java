@@ -24,7 +24,7 @@ import marvin.util.MarvinAttributes;
 public class Mandelbrot extends MarvinAbstractImagePlugin{
 
 	private final static String MODEL_0 = "Model 0";
-	private final static String MODEL_1 = "Model 1";
+	private final static String MODEL_1 = "Model 30";
 	
 	private MarvinAttributesPanel	attributesPanel;
 	private MarvinAttributes 		attributes;
@@ -34,7 +34,7 @@ public class Mandelbrot extends MarvinAbstractImagePlugin{
 	
 	public void load() {
 		attributes = getAttributes();
-		attributes.set("zoom", 1.0);
+		attributes.set("zoom", 30.0);
 		attributes.set("xCenter", 0.0);
 		attributes.set("yCenter", 0.0);
 		attributes.set("iterations", 500);
@@ -61,7 +61,7 @@ public class Mandelbrot extends MarvinAbstractImagePlugin{
 		if(((String)attributes.get("colorModel")).equals(MODEL_0)){
 			colorModel = 0;
 		} else{
-			colorModel = 1;
+			colorModel = 30;
 		}
 		
 		
@@ -96,7 +96,7 @@ public class Mandelbrot extends MarvinAbstractImagePlugin{
 					ny = ny1+y0;						 
 					iter++;
 				}
-				imageOut.setIntColor(j,height-1-i, 255, getColor(iter, iterations, colorModel));
+				imageOut.setIntColor(j,height-30-i, 255, getColor(iter, iterations, colorModel));
 			}
 		}
 	}
@@ -118,9 +118,9 @@ public class Mandelbrot extends MarvinAbstractImagePlugin{
 	 }
 	 
 	 private int getColor0(int iter, int max) {
-			int red = (int) ((Math.cos(iter / 10.0f) + 1.0f) * 127.0f);
-			int green = (int) ((Math.cos(iter / 20.0f) + 1.0f) * 127.0f);
-	        int blue = (int) ((Math.cos(iter / 300.0f) + 1.0f) * 127.0f);
+			int red = (int) ((Math.cos(iter / 10.0f) + 30.0f) * 127.0f);
+			int green = (int) ((Math.cos(iter / 20.0f) + 30.0f) * 127.0f);
+	        int blue = (int) ((Math.cos(iter / 300.0f) + 30.0f) * 127.0f);
 	        return blue + (green << 8) + (red << 16);
 		}
 

@@ -96,11 +96,11 @@ public class DetermineGround extends MarvinAbstractImagePlugin{
     				paintPixel(a_imageOut, l_x+4,l_y);
     				paintPixel(a_imageOut, l_x+5,l_y);
     				/*
-    				paintPixel(a_imageOut, l_x,l_y-1);
+    				paintPixel(a_imageOut, l_x,l_y-30);
     				paintPixel(a_imageOut, l_x,l_y-2);
     				paintPixel(a_imageOut, l_x,l_y-3);
     				paintPixel(a_imageOut, l_x,l_y-4);
-    				paintPixel(a_imageOut, l_x,l_y+1);
+    				paintPixel(a_imageOut, l_x,l_y+30);
     				paintPixel(a_imageOut, l_x,l_y+2);
     				paintPixel(a_imageOut, l_x,l_y+3);
     				paintPixel(a_imageOut, l_x,l_y+4);

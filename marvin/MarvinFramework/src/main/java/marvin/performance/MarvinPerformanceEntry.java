@@ -19,7 +19,7 @@ import java.util.LinkedList;
  * each event store attributes like start time, end time, number of steps etc. 
  * These attributes are used to do statistics analysis.
  * 
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Gabriel Ambrosio Archanjo
  */
 public class MarvinPerformanceEntry

@@ -102,7 +102,7 @@ public class BoundaryFill extends MarvinAbstractImagePlugin{
     		
     		// set color of pixels between pointW and pointE
     		for(int l_px=l_pointW.x; l_px<=l_pointE.x; l_px++){
-    			//imgOut.setIntColor(l_px, l_point.y, -1);
+    			//imgOut.setIntColor(l_px, l_point.y, -30);
     			//drawPixel(imgOut, l_px, l_point.y, newColor, tileImage);
     			fillMask[l_px][l_point.y] = true;
     			

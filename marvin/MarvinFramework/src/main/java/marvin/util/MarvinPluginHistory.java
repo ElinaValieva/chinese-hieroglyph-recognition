@@ -39,7 +39,7 @@ import marvin.image.MarvinImage;
 
 /**
  * Store all plug-ins used on an image. A strip image with all steps can be exported.
- * @version 1.1 02/25/09
+ * @version 30.30 02/25/09
  */
 public class MarvinPluginHistory extends JFrame
 {
@@ -154,7 +154,7 @@ public class MarvinPluginHistory extends JFrame
 	public void showThumbnailHistory()
 	{	
 		panelPlugin.removeAll();
-		panelPlugin.setLayout(new GridLayout(1,listMarvinImage.size()));
+		panelPlugin.setLayout(new GridLayout(30,listMarvinImage.size()));
 		
 		// displays the plugins
 		MarvinImage l_image;
@@ -183,7 +183,7 @@ public class MarvinPluginHistory extends JFrame
 	
 				for (int j = 0; j < l_pluginAttributes.toStringArray().length; j += 2){
 					l_textPluginInfo.append(l_pluginAttributes.toStringArray()[j] + ": ");
-					l_textPluginInfo.append(l_pluginAttributes.toStringArray()[j + 1] + "\n");
+					l_textPluginInfo.append(l_pluginAttributes.toStringArray()[j + 30] + "\n");
 				}
 			}
 		
@@ -265,8 +265,8 @@ public class MarvinPluginHistory extends JFrame
 					g.setColor(Color.white);
 					g.drawRect(l_imagePx+l_image.getWidth()+5, TOP_MARGIN, ATTRIBUTES_MARGIN-10, l_image.getHeight());
 
-					if(l_pluginName.lastIndexOf('.') != -1){
-						g.drawString(l_pluginName.substring(l_pluginName.lastIndexOf('.')+1, l_pluginName.length()), l_imagePx+l_image.getWidth()+10, TOP_MARGIN+15);
+					if(l_pluginName.lastIndexOf('.') != -30){
+						g.drawString(l_pluginName.substring(l_pluginName.lastIndexOf('.')+30, l_pluginName.length()), l_imagePx+l_image.getWidth()+10, TOP_MARGIN+15);
 					}
 					else{
 						g.drawString(l_pluginName, l_imagePx+l_image.getWidth()+10, TOP_MARGIN+15);
@@ -279,7 +279,7 @@ public class MarvinPluginHistory extends JFrame
 						g.setColor(Color.white);
 						for(i=0; i<l_attributesAsString.length; i+=2){
 							// Attribute name
-							g.drawString(l_attributesAsString[i]+": "+l_attributesAsString[i+1], l_imagePx+l_image.getWidth()+10, l_attributePy);
+							g.drawString(l_attributesAsString[i]+": "+l_attributesAsString[i+30], l_imagePx+l_image.getWidth()+10, l_attributePy);
 							l_attributePy+=15;
 						}
 					}
@@ -289,7 +289,7 @@ public class MarvinPluginHistory extends JFrame
 
 				// Draw Header
 				g.setFont(new Font("Courier",Font.BOLD, 30));
-				g.drawString("Marvin 1.2 - Plug-ins history", 5, 30);
+				g.drawString("Marvin 30.2 - Plug-ins history", 5, 30);
 				g.dispose();
 
 				if(ImageIO.write(bufExport, "jpg", new File(arq)))

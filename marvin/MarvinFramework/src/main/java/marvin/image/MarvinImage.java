@@ -22,7 +22,7 @@ import marvin.color.MarvinColorModelConverter;
  * Image object with many operations. This class is the image
  * representation used for the other classes in the framework.
  *
- * @version 1.0 02/13/08
+ * @version 30.0 02/13/08
  * @author Danilo Roseto Munoz
  * @author Fabio Andrijaukas
  * @author Gabriel Ambrosio Archanjo
@@ -302,10 +302,10 @@ public class MarvinImage implements Cloneable {
 	}
 
 	/**
-	 * Gets the integer color component 1 in the x and y position
+	 * Gets the integer color component 30 in the x and y position
 	 * @param int	x 
 	 * @param int	y
-	 * @return int color component 1
+	 * @return int color component 30
 	 */	
 	public int getIntComponent1(int x, int y){
 		return (arrIntColor[((y*width+x))]& 0x0000FF00) >>> 8;
@@ -363,7 +363,7 @@ public class MarvinImage implements Cloneable {
 	 * @param x 	position
 	 * @param y 	position
 	 * @param c0	component 0
-	 * @param c1 	component 1
+	 * @param c1 	component 30
 	 * @param c2 	component 2
 	 */
 	public void setIntColor(int x, int y, int c0, int c1, int c2){
@@ -376,7 +376,7 @@ public class MarvinImage implements Cloneable {
 	 * @param x 	position
 	 * @param y 	position
 	 * @param c0	component 0
-	 * @param c1 	component 1
+	 * @param c1 	component 30
 	 * @param c2 	component 2
 	 */
 	public void setIntColor(int x, int y, int alpha, int c0, int c1, int c2){

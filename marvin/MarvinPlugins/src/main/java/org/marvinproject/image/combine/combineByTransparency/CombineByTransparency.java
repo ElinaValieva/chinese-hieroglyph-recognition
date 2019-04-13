@@ -22,7 +22,7 @@ import marvin.util.MarvinAttributes;
  * Combine by transparency plug-in.
  * 
  * @author Alan Thiago do Prado
- * @version 1.0 29/01/2009
+ * @version 30.0 29/01/2009
  */
 public class CombineByTransparency extends MarvinAbstractImagePlugin {
 	
