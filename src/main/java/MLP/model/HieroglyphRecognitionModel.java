@@ -27,6 +27,8 @@ public class HieroglyphRecognitionModel {
 
     private BufferedImage bufferedImage;
 
+    private String path;
+
     public static Builder builder() {
         return new Builder();
     }
@@ -61,6 +63,11 @@ public class HieroglyphRecognitionModel {
 
         public Builder bufferedImage(BufferedImage bufferedImage) {
             hieroglyphRecognitionModel.setBufferedImage(bufferedImage);
+            return this;
+        }
+
+        public Builder path(String path) {
+            hieroglyphRecognitionModel.setPath(path);
             return this;
         }
 
