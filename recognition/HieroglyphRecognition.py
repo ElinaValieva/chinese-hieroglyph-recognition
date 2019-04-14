@@ -1,11 +1,12 @@
 import numpy as np
 from keras.engine.saving import model_from_json
-
 import recognition.HieroglyphNNModel as nn
 from util import Util
 
 image_size = 100
 
+
+# Module for prediction results
 
 def recognize(image_path):
     test_dataset = Util.load_image(image_path, image_size)
