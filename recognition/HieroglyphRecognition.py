@@ -1,33 +1,19 @@
-import numpy as numpy
-from keras.preprocessing import image
-from keras.models import model_from_json
+import numpy as np
 import recognition.HieroglyphNNModel as nn
+from recognition import Util
+
+image_size = 100
 
 
 def recognize(image_path):
-    image_format = image.load_img(image_path, target_size=(28, 28), color_mode="grayscale")
-
-    # Transform image to vector
-    vector = image.img_to_array(image_format)
-
-    # Normalization image
-    vector = 255 - vector
-    vector /= 255
-    vector = numpy.expand_dims(vector, axis=1)
-
+    test_dataset = Util.load_image(image_path, image_size)
     try:
-        # Loading model from json
-        json_file = open("../controller/mnist_model.json", "r")
-        loaded_model_json = json_file.read()
-        json_file.close()
-        loaded_model = model_from_json(loaded_model_json)
-        loaded_model.load_weights("../controller/mnist_model.h5")
-        loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+        model = Util.load_nn_model()
     except FileNotFoundError:
         print('File not found error. Try to train NN')
         nn.train()
 
-    # Prediction result of input
-    prediction = loaded_model.predict(vector)
-    result = numpy.argmax(prediction)
+    prediction = model.predict(test_dataset)
+    result = np.argmax(prediction)
+    print('Recognize hieroglyph: ' + str(result))
     return result
