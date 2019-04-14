@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
  * Constants for application
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ApplicationConstants {
+public class Constants {
 
     public static final String URL_VIEW = "/";
 
