@@ -2,7 +2,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten
 from util import Util
 
-count_categories = 18
+count_categories = 33
 count_epochs = 100
 image_size = 100
 
