@@ -30,10 +30,10 @@ def generate_categories(category_size):
 
 def save_nn_model(model):
     model_json = model.to_json()
-    json_file = open("mnist_model.json", "w")
+    json_file = open("../recognition/mnist_model.json", "w")
     json_file.write(model_json)
     json_file.close()
-    model.save_weights("mnist_model.h5")
+    model.save_weights("../recognition/mnist_model.h5")
 
 
 def load_image(path, size):
@@ -43,13 +43,3 @@ def load_image(path, size):
     np_img /= 255
     dataset = np_img.reshape(1, 1, size, size)
     return dataset
-
-
-def load_nn_model():
-    json_file = open("../recognition/mnist_model.json", "r")
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
-    loaded_model.load_weights("../recognition/mnist_model.h5")
-    loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
-    return loaded_model
