@@ -2,14 +2,16 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten
 from util import Util
 
-count_categories = 33
 count_epochs = 100
 image_size = 100
 
 
+# Module for creating neural network and training on dataset from 'train_data/..'
+
 def train():
     train_x = Util.generate_dataset('../train_data/', image_size)
-    train_y = Util.generate_categories(count_categories)
+    count_categories = Util.get_categories_cnt()
+    train_y = Util.generate_categories()
 
     model = Sequential()
     model.add(

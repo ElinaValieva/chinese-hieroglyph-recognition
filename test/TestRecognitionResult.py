@@ -22,10 +22,10 @@ def test():
     assert HieroglyphRecognition.recognize('../test_data/16.png') == 11
     assert HieroglyphRecognition.recognize('../test_data/17.png') == 11
     assert HieroglyphRecognition.recognize('../test_data/18.png') == 14
-    assert HieroglyphRecognition.recognize('../test_data/1.png') == 17
     assert HieroglyphRecognition.recognize('../test_data/3.png') == 15
     assert HieroglyphRecognition.recognize('../test_data/15.png') == 15
     assert HieroglyphRecognition.recognize('../test_data/20.png') == 16
+    assert HieroglyphRecognition.recognize('../test_data/1.png') == 17
     assert HieroglyphRecognition.recognize('../test_data/19.png') == 17
     assert HieroglyphRecognition.recognize('../test_data/25.png') == 18
     assert HieroglyphRecognition.recognize('../test_data/26.png') == 19
