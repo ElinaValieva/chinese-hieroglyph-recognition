@@ -65,10 +65,8 @@ public class SegmentationService {
 
         IntStream.range(1, segments.length).forEach(i -> {
             MarvinSegment segmentResult = segments[i];
-            if (i < (segments.length - 1)) {
-                MarvinSegment segmentResultInnerElement = segments[i + 1];
-                formResult(segmentResult, segmentResultInnerElement, hieroglyphRecognitionModel, loadImage);
-            }
+            MarvinSegment segmentResultInnerElement = i < (segments.length - 1) ? segments[i + 1] : null;
+            formResult(segmentResult, segmentResultInnerElement, hieroglyphRecognitionModel, loadImage);
         });
 
         MarvinImageIO.saveImage(loadImage, fileUtility.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
@@ -126,7 +124,7 @@ public class SegmentationService {
         int xEnd = xStart + end.x + 1;
         int yStart = start.y;
         int yEnd = yStart + end.y + 1;
-        if (vector.length <= yEnd || vector[0].length <= xEnd)
+        if (vector.length < yEnd || vector[0].length < xEnd)
             return;
         IntStream.range(yStart, yEnd).forEach(height ->
                 IntStream.range(xStart, xEnd).forEach(width -> vector[height][width] = 0));
@@ -134,16 +132,19 @@ public class SegmentationService {
 
     private void formResult(MarvinSegment marvinSegment, MarvinSegment marvinSegmentInnerElement, HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinImage marvinImage) {
         int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegment);
-        int[][] resizingVectorForInnerElement = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
 
-        if (isIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
-            Point start = new Point(marvinSegmentInnerElement.x1 - marvinSegment.x1, marvinSegmentInnerElement.y1 - marvinSegment.y1);
-            Point end = new Point(marvinSegmentInnerElement.x2 - marvinSegmentInnerElement.x1, marvinSegmentInnerElement.y2 - marvinSegmentInnerElement.y1);
-            removeArea(resizingVector, start, end);
+        if (marvinSegmentInnerElement != null) {
+            int[][] resizingVectorForInnerElement = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
+
+            if (isIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
+                Point start = new Point(Math.abs(marvinSegmentInnerElement.x1 - marvinSegment.x1),
+                        Math.abs(marvinSegmentInnerElement.y1 - marvinSegment.y1));
+                Point end = new Point(Math.abs(marvinSegmentInnerElement.x2 - marvinSegmentInnerElement.x1),
+                        Math.abs(marvinSegmentInnerElement.y2 - marvinSegmentInnerElement.y1));
+                removeArea(resizingVector, start, end);
+            }
         }
-
         formResult(resizingVector, marvinSegment, marvinImage);
-        formResult(resizingVectorForInnerElement, marvinSegment, marvinImage);
     }
 
 
@@ -176,7 +177,7 @@ public class SegmentationService {
     }
 
     private boolean checkForAvailableArea(MarvinSegment marvinSegment) {
-        return marvinSegment.area > THRESHOLD_FOR_RESING;
+        return marvinSegment.area > THRESHOLD_FOR_AREA && marvinSegment.height > THRESHOLD_FOR_Y && marvinSegment.width > THRESHOLD_FOR_X;
     }
 
     private void formResult(int[][] resizingVector, MarvinSegment segmentResult, MarvinImage loadImage) {
