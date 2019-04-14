@@ -20,5 +20,7 @@ public class SegmentationConstants {
 
     public static final String SEGMENTATION_RESULT_FILE_NAME = "segmentation.png";
 
-    public static final int THRESHOLD_FOR_RESING = 25;
+    public static final int THRESHOLD_FOR_AREA = 75;
+    public static final int THRESHOLD_FOR_X = 7;
+    public static final int THRESHOLD_FOR_Y = 7;
 }

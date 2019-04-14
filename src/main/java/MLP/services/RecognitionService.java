@@ -16,14 +16,14 @@ import java.util.List;
  * Main service for recognition
  */
 @Service
-public class HRService {
+public class RecognitionService {
 
     private final FilterService filterService;
     private final SegmentationService segmentationService;
     private final ResizeUtility resizeUtility;
 
     @Autowired
-    public HRService(FilterService filterService, SegmentationService segmentationService, ResizeUtility resizeUtility) {
+    public RecognitionService(FilterService filterService, SegmentationService segmentationService, ResizeUtility resizeUtility) {
         this.filterService = filterService;
         this.segmentationService = segmentationService;
         this.resizeUtility = resizeUtility;

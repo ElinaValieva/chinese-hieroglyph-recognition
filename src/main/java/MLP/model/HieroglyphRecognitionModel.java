@@ -42,7 +42,7 @@ public class HieroglyphRecognitionModel {
 
         private HieroglyphRecognitionModel hieroglyphRecognitionModel;
 
-        public Builder() {
+        Builder() {
             hieroglyphRecognitionModel = new HieroglyphRecognitionModel();
         }
 
