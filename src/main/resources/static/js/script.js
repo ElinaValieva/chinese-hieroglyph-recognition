@@ -78,7 +78,28 @@ $(function () {
         function startUpload() {
             if (!uploading && fileName != '') {
                 uploading = true;
+                uploadFile();
             }
+        }
+
+        function uploadFile() {
+            event.preventDefault();
+            var formData = new FormData();
+            formData.append('file', $("input[name=file]")[0].files[0]);
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/upload",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000
+            }).done(function (data) {
+                console.log(JSON.stringify(data));
+            }).fail(function (e) {
+                console.log("ERROR : ", e);
+            });
         }
     }
 );
