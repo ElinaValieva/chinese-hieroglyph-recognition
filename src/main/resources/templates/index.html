@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+    <script src="../js/script.js"></script>
+</head>
+<body>
+<form id="msform">
+    <!-- progressbar -->
+    <ul id="progressbar">
+        <li class="active">Hieroglyph</li>
+        <li>Segmentation</li>
+        <li>Recognition</li>
+    </ul>
+    <fieldset>
+        <h2 class="fs-title">Upload hieroglyph</h2>
+        <h3 class="fs-subtitle">This is step 1</h3>
+        <div class="dropzone">
+            <div class="content">
+                <img src="http://100dayscss.com/codepen/upload.svg" class="upload">
+                <span class="filename"></span>
+                <input type="file" class="input">
+            </div>
+        </div>
+        <input type="button" name="next" class="next action-button upload-btn" value="Next"/>
+    </fieldset>
+    <fieldset>
+        <h2 class="fs-title">Segmentation results</h2>
+        <h3 class="fs-subtitle">This is step 2</h3>
+        <img src="../images/segmentation.png" style="height: 350px">
+        <input type="button" name="previous" class="previous action-button" value="Previous"/>
+        <input type="button" name="next" class="next action-button" value="Next"/>
+    </fieldset>
+    <fieldset>
+        <h2 class="fs-title">Recognition results</h2>
+        <h3 class="fs-subtitle">This is step 3</h3>
+        <input type="text" name="fname" placeholder="First Name"/>
+        <input type="text" name="lname" placeholder="Last Name"/>
+        <input type="text" name="phone" placeholder="Phone"/>
+        <textarea name="address" placeholder="Address"></textarea>
+        <input type="button" name="previous" class="previous action-button" value="Previous"/>
+        <input type="submit" name="submit" class="submit action-button" value="Submit"/>
+    </fieldset>
+</form>
+</body>
+</html>
