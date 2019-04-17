@@ -1,6 +1,8 @@
 package MLP.utility;
 
 import MLP.configuration.StorageProperty;
+import MLP.exception.ErrorCode;
+import MLP.exception.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +34,16 @@ public class FileUtility {
         rootDirectory = Paths.get(storageProperty.location);
     }
 
-    public void createImage(MultipartFile file) {
+    public String createImage(MultipartFile file) throws RecognitionException {
         logger.debug("Try to save file {}", file.getOriginalFilename());
         try (InputStream inputStream = file.getInputStream()) {
             Path path = getFileDirectory(file.getOriginalFilename());
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
             logger.debug("Save file {}", file.getOriginalFilename());
+            return path.toUri().getPath();
         } catch (IOException e) {
             logger.error("", e);
+            throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
         }
     }
 

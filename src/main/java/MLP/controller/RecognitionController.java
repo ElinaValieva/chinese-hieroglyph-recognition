@@ -30,8 +30,7 @@ public class RecognitionController {
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException, RecognitionException {
-        String path = multipartFile.getOriginalFilename();
-        List<HieroglyphRecognitionModel> imageSegmentation = recognitionService.recognize(path);
+        List<HieroglyphRecognitionModel> imageSegmentation = recognitionService.recognize(multipartFile);
         return ResponseEntity.ok(imageSegmentation);
     }
 }
