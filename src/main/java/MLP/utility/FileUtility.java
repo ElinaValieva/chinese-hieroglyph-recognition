@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.util.Objects;
 
 /**
  * author: ElinaValieva on 15.12.2018
@@ -73,19 +72,17 @@ public class FileUtility {
     }
 
 
-    public Path getFileDirectory(String fileName) throws IOException {
+    public String getPathDirectory(String fileName) throws IOException {
+        return getFileDirectory(fileName).toUri().getPath();
+    }
+
+    private Path getFileDirectory(String fileName) throws IOException {
         if (!Files.exists(rootDirectory)) {
             logger.debug("Try to create directory for files");
             Files.createDirectory(rootDirectory);
             logger.debug("Create directory files");
         }
         return rootDirectory.resolve(fileName);
-    }
-
-    public String getFileResourceDirectory(String fileName) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
-        return file.getPath();
     }
 
     public String getFilesPath(String fileName) {

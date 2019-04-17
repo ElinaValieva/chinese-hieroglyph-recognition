@@ -51,7 +51,7 @@ public class SegmentationService {
         this.recognitionModelMapUtility = recognitionModelMapUtility;
     }
 
-    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException {
+    public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
         log.debug("Start segmenting process for image: {}", imagePath);
         HieroglyphRecognitionModel hieroglyphRecognitionModel = recognitionModelMapUtility.mapToModel(imagePath);
         hieroglyphRecognitionModels = new ArrayList<>();
@@ -69,7 +69,7 @@ public class SegmentationService {
             formResult(segmentResult, segmentResultInnerElement, hieroglyphRecognitionModel, loadImage);
         });
 
-        MarvinImageIO.saveImage(loadImage, fileUtility.getFileResourceDirectory(SEGMENTATION_RESULT_FILE_NAME));
+        MarvinImageIO.saveImage(loadImage, fileUtility.getPathDirectory(SEGMENTATION_RESULT_FILE_NAME));
         saveResults(hieroglyphRecognitionModels);
         return hieroglyphRecognitionModels;
     }

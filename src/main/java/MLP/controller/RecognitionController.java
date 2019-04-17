@@ -1,17 +1,15 @@
 package MLP.controller;
 
 import MLP.exception.RecognitionException;
-import MLP.model.HieroglyphRecognitionModel;
 import MLP.services.RecognitionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 import static MLP.common.Constants.FILE;
 import static MLP.common.Constants.URL_UPLOAD;
@@ -29,8 +27,8 @@ public class RecognitionController {
     }
 
     @PostMapping(value = URL_UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException, RecognitionException {
-        List<HieroglyphRecognitionModel> imageSegmentation = recognitionService.recognize(multipartFile);
-        return ResponseEntity.ok(imageSegmentation);
+    public HttpStatus uploadFileMulti(@RequestParam(FILE) MultipartFile multipartFile) throws IOException, RecognitionException {
+        recognitionService.recognize(multipartFile);
+        return HttpStatus.OK;
     }
 }
