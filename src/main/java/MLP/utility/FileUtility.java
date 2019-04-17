@@ -1,6 +1,8 @@
 package MLP.utility;
 
 import MLP.configuration.StorageProperty;
+import MLP.exception.ErrorCode;
+import MLP.exception.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.util.Objects;
 
 /**
  * author: ElinaValieva on 15.12.2018
@@ -32,14 +33,16 @@ public class FileUtility {
         rootDirectory = Paths.get(storageProperty.location);
     }
 
-    public void createImage(MultipartFile file) {
+    public String createImage(MultipartFile file) throws RecognitionException {
         logger.debug("Try to save file {}", file.getOriginalFilename());
         try (InputStream inputStream = file.getInputStream()) {
             Path path = getFileDirectory(file.getOriginalFilename());
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
             logger.debug("Save file {}", file.getOriginalFilename());
+            return path.toUri().getPath();
         } catch (IOException e) {
             logger.error("", e);
+            throw new RecognitionException(ErrorCode.ERROR_CODE_FILE_NOT_FOUND.getMessage());
         }
     }
 
@@ -69,19 +72,17 @@ public class FileUtility {
     }
 
 
-    public Path getFileDirectory(String fileName) throws IOException {
+    public String getPathDirectory(String fileName) throws IOException {
+        return getFileDirectory(fileName).toUri().getPath();
+    }
+
+    private Path getFileDirectory(String fileName) throws IOException {
         if (!Files.exists(rootDirectory)) {
             logger.debug("Try to create directory for files");
             Files.createDirectory(rootDirectory);
             logger.debug("Create directory files");
         }
         return rootDirectory.resolve(fileName);
-    }
-
-    public String getFileResourceDirectory(String fileName) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
-        return file.getPath();
     }
 
     public String getFilesPath(String fileName) {
