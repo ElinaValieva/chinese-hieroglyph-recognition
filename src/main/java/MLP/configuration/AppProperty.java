@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
  * Property for storage settings
  */
 @Component
-public class StorageProperty {
+public class AppProperty {
 
     @Value("${storage.location}")
     public String location;
+
+    @Value("${neural.network.url}")
+    public String neuralNetworkURl;
 }

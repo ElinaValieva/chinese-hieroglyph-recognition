@@ -1,6 +1,6 @@
 package MLP.utility;
 
-import MLP.configuration.StorageProperty;
+import MLP.configuration.AppProperty;
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ public class FileUtility {
     private final Logger logger = LoggerFactory.getLogger(FileUtility.class);
 
     @Autowired
-    public FileUtility(StorageProperty storageProperty) {
-        rootDirectory = Paths.get(storageProperty.location);
+    public FileUtility(AppProperty appProperty) {
+        rootDirectory = Paths.get(appProperty.location);
     }
 
     public String createImage(MultipartFile file) throws RecognitionException {
