@@ -32,6 +32,7 @@
         <bootstrap.version>4.1.3</bootstrap.version>
         <marvin.version>1.5.5</marvin.version>
         <okhttp.version>3.10.0</okhttp.version>
+        <h2.version>1.4.197</h2.version>
     </properties>
 
     <dependencies>
@@ -52,6 +53,14 @@
         </dependency>
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Dev components-->
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
@@ -59,29 +68,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <version>${starter.test.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.directory.studio</groupId>
             <artifactId>org.apache.commons.io</artifactId>
             <version>${io.util.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.coobird</groupId>
-            <artifactId>thumbnailator</artifactId>
-            <version>${thumbnailator.version}</version>
         </dependency>
 
         <dependency>
@@ -96,6 +85,31 @@
             <version>${bootstrap.version}</version>
         </dependency>
 
+        <!--Http components-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+
+        <!--Database-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--Marvin-->
         <dependency>
             <groupId>com.github.downgoon</groupId>
             <artifactId>MarvinPlugins</artifactId>
@@ -106,13 +120,6 @@
             <groupId>com.github.downgoon</groupId>
             <artifactId>MarvinFramework</artifactId>
             <version>${marvin.version}</version>
-        </dependency>
-
-        <!--Http components-->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
         </dependency>
     </dependencies>
 
