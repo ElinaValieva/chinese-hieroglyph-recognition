@@ -5,8 +5,8 @@ import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
 import MLP.service.file_manager.FileService;
-import MLP.service.image_manager.ImageService;
 import MLP.service.hieroglyph_mapper.HieroglyphMapperService;
+import MLP.service.image_manager.ImageService;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
@@ -157,9 +157,10 @@ public class SegmentationService {
         Point pointAEnd = new Point(marvinSegment.x2, marvinSegment.y2);
         Point pointBStart = new Point(marvinSegmentSecond.x1, marvinSegmentSecond.y1);
         Point pointBEnd = new Point(marvinSegmentSecond.x2, marvinSegmentSecond.y2);
-        return ((pointBStart.x <= pointAStart.x && pointAStart.x <= pointBEnd.x) || (pointAStart.x <= pointBStart.x && pointBStart.x <= pointAEnd.x))
-                &&
-                ((pointBStart.y <= pointAStart.y && pointAStart.y <= pointBEnd.y) || (pointAStart.y <= pointBStart.y && pointBStart.y <= pointAEnd.y));
+        return (intersection(pointAStart, pointBStart, pointBEnd) &&
+                intersection(pointAEnd, pointBStart, pointBEnd)) ||
+                (intersection(pointBStart, pointAStart, pointAEnd) &&
+                        intersection(pointBEnd, pointAStart, pointAEnd));
     }
 
     private void filterGreen(MarvinImage image) {
@@ -206,5 +207,12 @@ public class SegmentationService {
                 log.warn("File already defined. Override existing.");
             }
         });
+    }
+
+    private boolean intersection(Point pointAStart, Point pointBStart, Point pointBEnd) {
+        return pointBStart.x <= pointAStart.x &&
+                pointAStart.x <= pointBEnd.x &&
+                pointBStart.y <= pointAStart.y &&
+                pointAStart.y <= pointBEnd.y;
     }
 }
