@@ -3,6 +3,7 @@ package MLP.service.file_manager;
 import MLP.configuration.AppProperty;
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
+import MLP.utility.PathGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class FileManagerService implements FileService {
         logger.debug("Try to delete all files");
         FileSystemUtils.deleteRecursively(rootDirectory.toFile());
         logger.debug("Delete all files");
+        PathGenerator.reset();
     }
 
 

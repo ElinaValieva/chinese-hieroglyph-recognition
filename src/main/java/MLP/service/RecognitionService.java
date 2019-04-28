@@ -4,8 +4,8 @@ import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
 import MLP.model.Translation;
 import MLP.service.file_manager.FileService;
-import MLP.service.image_manager.ImageService;
 import MLP.service.filtering.FilterService;
+import MLP.service.image_manager.ImageService;
 import MLP.service.resizing.ResizeService;
 import MLP.service.rest_client.RestClient;
 import MLP.service.segmentation.SegmentationService;
@@ -50,6 +50,7 @@ public class RecognitionService {
     }
 
     public List<Translation> recognize(MultipartFile multipartFile) throws IOException, RecognitionException {
+        fileService.deleteAll();
         String imagePath = fileService.createImage(multipartFile);
         filterService.filter(imagePath);
         List<HieroglyphRecognitionModel> segmentedHieroglyphs = segmentationService.segment(imagePath);
@@ -57,6 +58,7 @@ public class RecognitionService {
         List<Integer> resultFromNN = restClient.sendSegments(segmentedHieroglyphs.stream()
                 .map(HieroglyphRecognitionModel::getPath)
                 .collect(Collectors.toList()));
+        
         return translationService.translate(resultFromNN);
     }
 }
