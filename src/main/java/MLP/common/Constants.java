@@ -16,5 +16,5 @@ public class Constants {
 
     public static final String URL_UPLOAD = "/upload";
 
-    public static final String FILE = "file_manager";
+    public static final String FILE = "file";
 }
