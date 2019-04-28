@@ -3,6 +3,7 @@ package MLP.service.resizing;
 import MLP.model.HieroglyphRecognitionModel;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -10,11 +11,9 @@ import java.util.List;
  */
 public interface ResizeService {
 
-    int[][] resize(int[][] vector);
-
     BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight);
 
-    void resing(HieroglyphRecognitionModel hieroglyphRecognitionModel);
+    void resizing(HieroglyphRecognitionModel hieroglyphRecognitionModel) throws IOException;
 
     void resizeHieroglyphs(List<HieroglyphRecognitionModel> hieroglyphs);
 }
