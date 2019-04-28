@@ -1,8 +1,7 @@
 package MLP.services.preprocessing;
 
-import MLP.utility.FileUtility;
-import MLP.utility.ImageUtility;
-import MLP.utility.ResizeUtility;
+import MLP.services.file_service.FileService;
+import MLP.services.image_service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +15,21 @@ import java.io.IOException;
 @Service
 public class FilterService {
 
-    private final FileUtility fileManagerService;
-    private final ImageUtility imageUtility;
-    private final ResizeUtility resizeUtility;
+    private final FileService fileService;
+    private final ImageService imageService;
 
     @Autowired
-    public FilterService(FileUtility fileManagerService, ImageUtility imageUtility, ResizeUtility resizeUtility) {
-        this.fileManagerService = fileManagerService;
-        this.imageUtility = imageUtility;
-        this.resizeUtility = resizeUtility;
+    public FilterService(FileService fileService,
+                         ImageService imageService) {
+        this.fileService = fileService;
+        this.imageService = imageService;
     }
 
     public void filter(String imagePath) throws IOException {
-        BufferedImage bufferedImage = imageUtility.getImage(imagePath);
-        bufferedImage = resizeUtility.scale(bufferedImage, bufferedImage.getWidth(), bufferedImage.getHeight());
-        int[][] vector = imageUtility.imageToVector(bufferedImage);
-        bufferedImage = imageUtility.vectorToImage(vector);
-        fileManagerService.saveImage(bufferedImage, imagePath);
+        BufferedImage bufferedImage = imageService.getImage(imagePath);
+        bufferedImage = imageService.scale(bufferedImage, bufferedImage.getWidth(), bufferedImage.getHeight());
+        int[][] vector = imageService.imageToVector(bufferedImage);
+        bufferedImage = imageService.vectorToImage(vector);
+        fileService.saveImage(bufferedImage, imagePath);
     }
 }
