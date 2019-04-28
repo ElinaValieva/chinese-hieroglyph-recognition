@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.util.Objects;
 
 /**
  * author: ElinaValieva on 15.12.2018
@@ -60,8 +59,10 @@ public class FileManagerService implements FileService {
     }
 
     @Override
-    public void createImage(BufferedImage bufferedImage, String fileName) throws IOException {
-        ImageIO.write(bufferedImage, "png", createFile(fileName));
+    public String createImage(BufferedImage bufferedImage, String fileName) throws IOException {
+        File imageFile = createFile(fileName);
+        ImageIO.write(bufferedImage, "png", imageFile);
+        return imageFile.getAbsolutePath();
     }
 
     @Override
@@ -91,12 +92,5 @@ public class FileManagerService implements FileService {
             logger.debug("Create directory files");
         }
         return rootDirectory.resolve(fileName);
-    }
-
-    @Override
-    public String getFilesPath(String fileName) {
-        File file = new File(Objects.requireNonNull(FileManagerService.class.getClassLoader().getResource(fileName)).getFile());
-        return file.getAbsolutePath();
-
     }
 }
