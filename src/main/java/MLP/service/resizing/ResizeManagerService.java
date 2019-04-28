@@ -1,19 +1,22 @@
 package MLP.service.resizing;
 
 import MLP.model.HieroglyphRecognitionModel;
-import MLP.service.image_manager.ImageService;
 import MLP.service.hieroglyph_mapper.HieroglyphMapperService;
+import MLP.service.image_manager.ImageService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 
 /**
  * author: ElinaValieva on 28.04.2019
  */
+@Log4j2
 @Service
 public class ResizeManagerService implements ResizeService {
 
@@ -26,15 +29,6 @@ public class ResizeManagerService implements ResizeService {
     public ResizeManagerService(HieroglyphMapperService hieroglyphMapperService, ImageService imageService) {
         this.hieroglyphMapperService = hieroglyphMapperService;
         this.imageService = imageService;
-    }
-
-    @Override
-    public int[][] resize(int[][] vector) {
-        int width = vector[0].length;
-        int height = vector.length;
-        return (width < RESIZE_X && height < RESIZE_X) ?
-                resizeX(vector) :
-                vector;
     }
 
     private int[][] resizeX(int[][] vector) {
@@ -82,11 +76,15 @@ public class ResizeManagerService implements ResizeService {
         BufferedImage bufferedImage = imageService.vectorToImage(vector);
         bufferedImage = scale(bufferedImage, RESIZE_X, RESIZE_X);
         int[][] resultVector = imageService.imageToVector(bufferedImage);
-        hieroglyphMapperService.mapToModel(hieroglyphRecognitionModel, resultVector, bufferedImage, RESIZE_X, RESIZE_X);
+        try {
+            hieroglyphMapperService.mapToModel(hieroglyphRecognitionModel, resultVector, bufferedImage, RESIZE_X, RESIZE_X);
+        } catch (IOException e) {
+            log.warn("Couldn't save image");
+        }
     }
 
     @Override
-    public void resing(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
+    public void resizing(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
         int[][] vector = hieroglyphRecognitionModel.getVector();
         int width = vector[0].length;
         int height = vector.length;
@@ -97,7 +95,7 @@ public class ResizeManagerService implements ResizeService {
 
     @Override
     public void resizeHieroglyphs(List<HieroglyphRecognitionModel> hieroglyphs) {
-        hieroglyphs.forEach(this::resing);
+        hieroglyphs.forEach(this::resizing);
     }
 
 }

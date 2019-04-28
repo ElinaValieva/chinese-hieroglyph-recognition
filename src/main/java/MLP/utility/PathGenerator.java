@@ -15,4 +15,8 @@ public class PathGenerator {
         number++;
         return String.format("result_%s.png", number);
     }
+
+    public static void reset() {
+        number = 0;
+    }
 }

@@ -13,7 +13,7 @@ public interface FileService {
 
     String createImage(MultipartFile file) throws RecognitionException;
 
-    void createImage(BufferedImage bufferedImage, String fileName) throws IOException;
+    String createImage(BufferedImage bufferedImage, String fileName) throws IOException;
 
     void saveImage(BufferedImage bufferedImage, String fileName) throws IOException;
 
@@ -21,5 +21,4 @@ public interface FileService {
 
     String getPathDirectory(String fileName) throws IOException;
 
-    String getFilesPath(String fileName);
 }

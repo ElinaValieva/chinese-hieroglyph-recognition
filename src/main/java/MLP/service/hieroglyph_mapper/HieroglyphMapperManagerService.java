@@ -56,23 +56,4 @@ public class HieroglyphMapperManagerService implements HieroglyphMapperService {
                 .height(height)
                 .width(width);
     }
-
-    private double[] generateVectorNN(int[][] vector, int width, int height) {
-        double[] inputs = new double[width * height];
-        for (int i = 0; i < vector.length; i++) {
-            int[] row = vector[i];
-            for (int j = 0; j < row.length; j++) {
-                int number = vector[i][j];
-                inputs[i * row.length + j] = (double) number;
-            }
-        }
-        return inputs;
-    }
-
-    public double[] generateVectorNN(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
-        int[][] vector = hieroglyphRecognitionModel.getVector();
-        int w = hieroglyphRecognitionModel.getWidth();
-        int h = hieroglyphRecognitionModel.getHeight();
-        return generateVectorNN(vector, w, h);
-    }
 }

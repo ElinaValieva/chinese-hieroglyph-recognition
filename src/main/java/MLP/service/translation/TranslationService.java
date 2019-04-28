@@ -21,7 +21,7 @@ public class TranslationService {
         this.translationRepository = translationRepository;
     }
 
-    public Translation translate(Integer code) {
+    private Translation translate(Integer code) {
         return translationRepository.findByCode(code);
     }
 
