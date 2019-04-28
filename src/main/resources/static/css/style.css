@@ -18,6 +18,10 @@ body {
     background: radial-gradient(rgba(47, 143, 216, .9), rgba(76, 206, 178, .9));
 }
 
+html {
+    height: 100%;
+}
+
 /*form styles*/
 #msform {
     width: var(--form-width);

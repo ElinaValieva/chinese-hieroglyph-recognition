@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * author: ElinaValieva on 28.04.2019
- * For db constants
+ * Database constants
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Table {

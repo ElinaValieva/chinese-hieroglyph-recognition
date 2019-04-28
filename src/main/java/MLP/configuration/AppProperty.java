@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * author: ElinaValieva on 15.12.2018
- * Property for storage settings
+ * Property for storage settings, neural network connecting
  */
 @Component
 public class AppProperty {
