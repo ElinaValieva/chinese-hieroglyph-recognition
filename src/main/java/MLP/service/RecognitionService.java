@@ -1,14 +1,15 @@
-package MLP.services;
+package MLP.service;
 
 import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
 import MLP.model.Translation;
-import MLP.services.preprocessing.FilterService;
-import MLP.services.rest_client.RestClient;
-import MLP.services.segmentation.SegmentationService;
-import MLP.services.translation.TranslationService;
-import MLP.utility.FileUtility;
-import MLP.utility.ResizeUtility;
+import MLP.service.file_manager.FileService;
+import MLP.service.image_manager.ImageService;
+import MLP.service.filtering.FilterService;
+import MLP.service.resizing.ResizeService;
+import MLP.service.rest_client.RestClient;
+import MLP.service.segmentation.SegmentationService;
+import MLP.service.translation.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,33 +27,33 @@ public class RecognitionService {
 
     private final FilterService filterService;
     private final SegmentationService segmentationService;
-    private final ResizeUtility resizeUtility;
-    private final FileUtility fileUtility;
-
+    private final FileService fileService;
     private final RestClient restClient;
-
     private final TranslationService translationService;
+    private final ResizeService resizeService;
+
 
     @Autowired
     public RecognitionService(FilterService filterService,
                               SegmentationService segmentationService,
-                              ResizeUtility resizeUtility,
-                              FileUtility fileUtility,
+                              FileService fileService,
                               RestClient restClient,
-                              TranslationService translationService) {
+                              TranslationService translationService,
+                              ImageService imageService,
+                              ResizeService resizeService) {
         this.filterService = filterService;
         this.segmentationService = segmentationService;
-        this.resizeUtility = resizeUtility;
-        this.fileUtility = fileUtility;
+        this.fileService = fileService;
         this.restClient = restClient;
         this.translationService = translationService;
+        this.resizeService = resizeService;
     }
 
     public List<Translation> recognize(MultipartFile multipartFile) throws IOException, RecognitionException {
-        String imagePath = fileUtility.createImage(multipartFile);
+        String imagePath = fileService.createImage(multipartFile);
         filterService.filter(imagePath);
         List<HieroglyphRecognitionModel> segmentedHieroglyphs = segmentationService.segment(imagePath);
-        resizeUtility.resizeHieroglyphs(segmentedHieroglyphs);
+        resizeService.resizeHieroglyphs(segmentedHieroglyphs);
         List<Integer> resultFromNN = restClient.sendSegments(segmentedHieroglyphs.stream()
                 .map(HieroglyphRecognitionModel::getPath)
                 .collect(Collectors.toList()));

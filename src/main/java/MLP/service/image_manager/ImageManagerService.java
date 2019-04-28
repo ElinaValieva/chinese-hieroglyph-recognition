@@ -1,9 +1,9 @@
-package MLP.utility;
+package MLP.service.image_manager;
 
 import MLP.model.HieroglyphRecognitionModel;
 import lombok.extern.log4j.Log4j2;
 import marvin.image.MarvinSegment;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,9 +17,10 @@ import java.util.stream.IntStream;
  * Utility for converting image to vector and vector to image
  */
 @Log4j2
-@Component
-public class ImageUtility {
+@Service
+public class ImageManagerService implements ImageService {
 
+    @Override
     public int[][] imageToVector(BufferedImage bufferedImage) {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -51,11 +52,13 @@ public class ImageUtility {
         return outputResult;
     }
 
+    @Override
     public int[][] resizeVector(HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinSegment marvinSegment) {
         Point startPoint = new Point(marvinSegment.x1, marvinSegment.y1);
         return resizeVector(hieroglyphRecognitionModel.getVector(), startPoint, marvinSegment.width, marvinSegment.height);
     }
 
+    @Override
     public BufferedImage vectorToImage(int[][] vector) {
         int width = vector.length;
         int height = vector[0].length;
@@ -71,6 +74,7 @@ public class ImageUtility {
         return bufferedImage;
     }
 
+    @Override
     public BufferedImage getImage(String path) {
         try {
             return ImageIO.read(new File(path));

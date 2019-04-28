@@ -1,28 +1,29 @@
-package MLP.utility;
+package MLP.service.hieroglyph_mapper;
 
 import MLP.model.HieroglyphRecognitionModel;
+import MLP.service.image_manager.ImageService;
+import MLP.utility.PathGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
 
 /**
- * author: ElinaValieva on 06.04.2019
- * HieroglyphRecognitionModel mapping utility
+ * author: ElinaValieva on 28.04.2019
  */
-@Component
-public class RecognitionModelMapUtility {
+@Service
+public class HieroglyphMapperManagerService implements HieroglyphMapperService {
 
-    private final ImageUtility imageUtility;
+    private final ImageService imageService;
 
     @Autowired
-    public RecognitionModelMapUtility(ImageUtility imageUtility) {
-        this.imageUtility = imageUtility;
+    public HieroglyphMapperManagerService(ImageService imageService) {
+        this.imageService = imageService;
     }
 
     public HieroglyphRecognitionModel mapToModel(String path) {
-        BufferedImage bufferedImage = imageUtility.getImage(path);
-        int[][] imageVector = imageUtility.imageToVector(bufferedImage);
+        BufferedImage bufferedImage = imageService.getImage(path);
+        int[][] imageVector = imageService.imageToVector(bufferedImage);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         return HieroglyphRecognitionModel.builder()
@@ -35,7 +36,7 @@ public class RecognitionModelMapUtility {
     }
 
     public HieroglyphRecognitionModel mapToModel(int[][] vector) {
-        BufferedImage bufferedImage = imageUtility.vectorToImage(vector);
+        BufferedImage bufferedImage = imageService.vectorToImage(vector);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         String path = PathGenerator.getPath();
@@ -48,7 +49,7 @@ public class RecognitionModelMapUtility {
                 .build();
     }
 
-    void mapToModel(HieroglyphRecognitionModel hieroglyphRecognitionModel, int[][] vector, BufferedImage bufferedImage, int width, int height) {
+    public void mapToModel(HieroglyphRecognitionModel hieroglyphRecognitionModel, int[][] vector, BufferedImage bufferedImage, int width, int height) {
         HieroglyphRecognitionModel.builder(hieroglyphRecognitionModel)
                 .bufferedImage(bufferedImage)
                 .vector(vector)
@@ -62,7 +63,7 @@ public class RecognitionModelMapUtility {
             int[] row = vector[i];
             for (int j = 0; j < row.length; j++) {
                 int number = vector[i][j];
-                inputs[i * row.length + j] = Double.valueOf(number);
+                inputs[i * row.length + j] = (double) number;
             }
         }
         return inputs;

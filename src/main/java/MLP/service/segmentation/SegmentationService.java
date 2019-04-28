@@ -1,12 +1,12 @@
-package MLP.services.segmentation;
+package MLP.service.segmentation;
 
 
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
-import MLP.utility.FileUtility;
-import MLP.utility.ImageUtility;
-import MLP.utility.RecognitionModelMapUtility;
+import MLP.service.file_manager.FileService;
+import MLP.service.image_manager.ImageService;
+import MLP.service.hieroglyph_mapper.HieroglyphMapperService;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static MLP.services.segmentation.common.SegmentationConstants.*;
+import static MLP.service.segmentation.common.SegmentationConstants.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 
@@ -36,24 +36,22 @@ import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 @Service
 public class SegmentationService {
 
-    private final FileUtility fileUtility;
-    private final ImageUtility imageUtility;
-    private final RecognitionModelMapUtility recognitionModelMapUtility;
-
+    private final FileService fileService;
+    private final ImageService imageService;
     private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
+    private final HieroglyphMapperService hieroglyphMapperService;
 
     @Autowired
-    public SegmentationService(FileUtility fileUtility,
-                               ImageUtility imageUtility,
-                               RecognitionModelMapUtility recognitionModelMapUtility) {
-        this.fileUtility = fileUtility;
-        this.imageUtility = imageUtility;
-        this.recognitionModelMapUtility = recognitionModelMapUtility;
+    public SegmentationService(FileService fileService,
+                               ImageService imageService, HieroglyphMapperService hieroglyphMapperService) {
+        this.fileService = fileService;
+        this.imageService = imageService;
+        this.hieroglyphMapperService = hieroglyphMapperService;
     }
 
     public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
         log.debug("Start segmenting process for image: {}", imagePath);
-        HieroglyphRecognitionModel hieroglyphRecognitionModel = recognitionModelMapUtility.mapToModel(imagePath);
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = hieroglyphMapperService.mapToModel(imagePath);
         hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
@@ -69,7 +67,7 @@ public class SegmentationService {
             formResult(segmentResult, segmentResultInnerElement, hieroglyphRecognitionModel, loadImage);
         });
 
-        MarvinImageIO.saveImage(loadImage, fileUtility.getPathDirectory(SEGMENTATION_RESULT_FILE_NAME));
+        MarvinImageIO.saveImage(loadImage, fileService.getPathDirectory(SEGMENTATION_RESULT_FILE_NAME));
         saveResults(hieroglyphRecognitionModels);
         return hieroglyphRecognitionModels;
     }
@@ -88,7 +86,7 @@ public class SegmentationService {
     }
 
     private void clearSegment(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
-        String path = fileUtility.getFilesPath(String.format("static/file-repository/%s", hieroglyphRecognitionModel.getPath()));
+        String path = fileService.getFilesPath(String.format("static/file-repository/%s", hieroglyphRecognitionModel.getPath()));
         MarvinImage loadImage = MarvinImageIO.loadImage(path);
 
         MarvinSegment[] segments = createSegments(loadImage);
@@ -106,7 +104,7 @@ public class SegmentationService {
         if (!checkForAvailableArea(marvinSegment))
             return;
 
-        int[][] resizingVector = imageUtility.resizeVector(model, marvinSegment);
+        int[][] resizingVector = imageService.resizeVector(model, marvinSegment);
 
         if (!checkForEmptyArea(resizingVector))
             return;
@@ -131,10 +129,10 @@ public class SegmentationService {
     }
 
     private void formResult(MarvinSegment marvinSegment, MarvinSegment marvinSegmentInnerElement, HieroglyphRecognitionModel hieroglyphRecognitionModel, MarvinImage marvinImage) {
-        int[][] resizingVector = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegment);
+        int[][] resizingVector = imageService.resizeVector(hieroglyphRecognitionModel, marvinSegment);
 
         if (marvinSegmentInnerElement != null) {
-            int[][] resizingVectorForInnerElement = imageUtility.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
+            int[][] resizingVectorForInnerElement = imageService.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
 
             if (isIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
                 Point start = new Point(Math.abs(marvinSegmentInnerElement.x1 - marvinSegment.x1),
@@ -184,7 +182,7 @@ public class SegmentationService {
         if (!checkForAvailableArea(segmentResult) || !checkForEmptyArea(resizingVector))
             return;
 
-        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = recognitionModelMapUtility.mapToModel(resizingVector);
+        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = hieroglyphMapperService.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
         loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
     }
@@ -203,7 +201,7 @@ public class SegmentationService {
     private void saveResults(List<HieroglyphRecognitionModel> hieroglyphRecognitionModels) {
         hieroglyphRecognitionModels.forEach(hieroglyphRecognitionModel -> {
             try {
-                fileUtility.createImage(hieroglyphRecognitionModel.getBufferedImage(), hieroglyphRecognitionModel.getPath());
+                fileService.createImage(hieroglyphRecognitionModel.getBufferedImage(), hieroglyphRecognitionModel.getPath());
             } catch (IOException e) {
                 log.warn("File already defined. Override existing.");
             }

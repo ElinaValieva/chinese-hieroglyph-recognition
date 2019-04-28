@@ -1,4 +1,4 @@
-package MLP.services.translation;
+package MLP.service.translation;
 
 import MLP.model.Translation;
 import MLP.repository.TranslationRepository;

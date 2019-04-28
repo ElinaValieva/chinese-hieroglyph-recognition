@@ -84,7 +84,7 @@ $(function () {
 
         function uploadFile() {
             event.preventDefault();
-            var formData = new FormData();
+            let formData = new FormData();
             formData.append('file', $("input[name=file]")[0].files[0]);
             $.ajax({
                 type: "POST",
@@ -97,9 +97,26 @@ $(function () {
                 timeout: 600000
             }).done(function (data) {
                 console.log(JSON.stringify(data));
+                showResults(data);
             }).fail(function (e) {
                 console.log("ERROR : ", e);
             });
+        }
+
+        function showResults(result) {
+            for (let i = 0; i < result.length; i++) {
+                let image = "../file-repository/result_" + (i + 1) + ".png";
+                $('#result').append("<div class='row'>\n" +
+                    "                <div class='col-3'>\n" +
+                    "                    <img src=" + image + " class='image-border'>\n" +
+                    "                </div>\n" +
+                    "                <div class='col'>\n" +
+                    "                    <label style='font-weight: bold'>" + result[i].key + "</label><br>\n" +
+                    "                    <label>" + [result[i].transcription] + "</label><br>\n" +
+                    "                    <label>Translation: " + result[i].translationEnglish + " (" + result[i].translationRussian + ")</label>\n" +
+                    "                </div>\n" +
+                    "            </div>")
+            }
         }
     }
 );

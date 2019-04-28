@@ -1,4 +1,4 @@
-package MLP.services.rest_client;
+package MLP.service.rest_client;
 
 import MLP.configuration.AppProperty;
 import MLP.exception.ErrorCode;

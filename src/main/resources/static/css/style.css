@@ -12,16 +12,10 @@
     padding: 0;
 }
 
-html {
-    height: 100%;
-    /*Image only BG fallback*/
-
-    /*background = gradient + image pattern combo*/
-    background: radial-gradient(rgba(47, 143, 216, .9), rgba(76, 206, 178, .9));
-}
-
 body {
     font-family: montserrat, arial, verdana;
+    height: 100%;
+    background: radial-gradient(rgba(47, 143, 216, .9), rgba(76, 206, 178, .9));
 }
 
 /*form styles*/
@@ -294,4 +288,13 @@ body {
     }
 }
 
+.image-border {
+    border: 1px dashed #ccc;
+    border-radius: 3px;
+}
 
+#result {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 300px;
+}

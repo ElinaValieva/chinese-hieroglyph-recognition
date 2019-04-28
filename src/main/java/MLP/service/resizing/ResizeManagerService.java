@@ -1,7 +1,10 @@
-package MLP.utility;
+package MLP.service.resizing;
 
 import MLP.model.HieroglyphRecognitionModel;
-import org.springframework.stereotype.Component;
+import MLP.service.image_manager.ImageService;
+import MLP.service.hieroglyph_mapper.HieroglyphMapperService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,24 +12,23 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * author: ElinaValieva on 07.04.2019
- * Service for resizing images
+ * author: ElinaValieva on 28.04.2019
  */
-@Component
-public class ResizeUtility {
+@Service
+public class ResizeManagerService implements ResizeService {
 
     private static final int RESIZE_X = 100;
 
-    private final ImageUtility imageUtility;
+    private final HieroglyphMapperService hieroglyphMapperService;
+    private final ImageService imageService;
 
-    private final RecognitionModelMapUtility recognitionModelMapUtility;
-
-
-    public ResizeUtility(ImageUtility imageUtility, RecognitionModelMapUtility recognitionModelMapUtility) {
-        this.imageUtility = imageUtility;
-        this.recognitionModelMapUtility = recognitionModelMapUtility;
+    @Autowired
+    public ResizeManagerService(HieroglyphMapperService hieroglyphMapperService, ImageService imageService) {
+        this.hieroglyphMapperService = hieroglyphMapperService;
+        this.imageService = imageService;
     }
 
+    @Override
     public int[][] resize(int[][] vector) {
         int width = vector[0].length;
         int height = vector.length;
@@ -60,6 +62,7 @@ public class ResizeUtility {
                 .vector(resultVector);
     }
 
+    @Override
     public BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight) {
         BufferedImage scaledImage = null;
         if (imageToScale != null) {
@@ -76,12 +79,13 @@ public class ResizeUtility {
 
     private void resizeBySquare(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
         int[][] vector = hieroglyphRecognitionModel.getVector();
-        BufferedImage bufferedImage = imageUtility.vectorToImage(vector);
+        BufferedImage bufferedImage = imageService.vectorToImage(vector);
         bufferedImage = scale(bufferedImage, RESIZE_X, RESIZE_X);
-        int[][] resultVector = imageUtility.imageToVector(bufferedImage);
-        recognitionModelMapUtility.mapToModel(hieroglyphRecognitionModel, resultVector, bufferedImage, RESIZE_X, RESIZE_X);
+        int[][] resultVector = imageService.imageToVector(bufferedImage);
+        hieroglyphMapperService.mapToModel(hieroglyphRecognitionModel, resultVector, bufferedImage, RESIZE_X, RESIZE_X);
     }
 
+    @Override
     public void resing(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
         int[][] vector = hieroglyphRecognitionModel.getVector();
         int width = vector[0].length;
@@ -91,7 +95,9 @@ public class ResizeUtility {
         resizeBySquare(hieroglyphRecognitionModel);
     }
 
+    @Override
     public void resizeHieroglyphs(List<HieroglyphRecognitionModel> hieroglyphs) {
         hieroglyphs.forEach(this::resing);
     }
+
 }
