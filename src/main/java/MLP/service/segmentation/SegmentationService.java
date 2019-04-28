@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static MLP.service.segmentation.common.SegmentationConstants.*;
+import static MLP.utility.IntersectionUtil.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 
@@ -68,7 +68,6 @@ public class SegmentationService {
         });
 
         MarvinImageIO.saveImage(loadImage, fileService.getPathDirectory(SEGMENTATION_RESULT_FILE_NAME));
-        saveResults(hieroglyphRecognitionModels);
         return hieroglyphRecognitionModels;
     }
 
@@ -81,42 +80,6 @@ public class SegmentationService {
         return floodfillSegmentation(image);
     }
 
-    private void clearSegments(List<HieroglyphRecognitionModel> hieroglyphRecognitionModels) {
-        hieroglyphRecognitionModels.forEach(this::clearSegment);
-    }
-
-    private void clearSegment(HieroglyphRecognitionModel hieroglyphRecognitionModel) {
-        String path = fileService.getFilesPath(String.format("static/file-repository/%s", hieroglyphRecognitionModel.getPath()));
-        MarvinImage loadImage = MarvinImageIO.loadImage(path);
-
-        MarvinSegment[] segments = createSegments(loadImage);
-
-        if (segments == null)
-            return;
-
-        if (segments.length > 1)
-            IntStream.range(1, segments.length).forEach(segmentIndex ->
-                    clearSegmentArea(hieroglyphRecognitionModel, segments[segmentIndex]));
-
-    }
-
-    private void clearSegmentArea(HieroglyphRecognitionModel model, MarvinSegment marvinSegment) {
-        if (!checkForAvailableArea(marvinSegment))
-            return;
-
-        int[][] resizingVector = imageService.resizeVector(model, marvinSegment);
-
-        if (!checkForEmptyArea(resizingVector))
-            return;
-
-        int[][] vector = model.getVector();
-        Point pointStart = new Point(marvinSegment.x1, marvinSegment.y1);
-        Point pointEnd = new Point(marvinSegment.x2, marvinSegment.y2);
-        removeArea(vector, pointStart, pointEnd);
-        HieroglyphRecognitionModel.builder(model)
-                .vector(vector);
-    }
-
     private void removeArea(int[][] vector, Point start, Point end) {
         int xStart = start.x;
         int xEnd = xStart + end.x + 1;
@@ -124,6 +87,7 @@ public class SegmentationService {
         int yEnd = yStart + end.y + 1;
         if (vector.length < yEnd || vector[0].length < xEnd)
             return;
+
         IntStream.range(yStart, yEnd).forEach(height ->
                 IntStream.range(xStart, xEnd).forEach(width -> vector[height][width] = 0));
     }
@@ -134,7 +98,7 @@ public class SegmentationService {
         if (marvinSegmentInnerElement != null) {
             int[][] resizingVectorForInnerElement = imageService.resizeVector(hieroglyphRecognitionModel, marvinSegmentInnerElement);
 
-            if (isIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
+            if (isInnerIntersect(marvinSegment, marvinSegmentInnerElement, resizingVector, resizingVectorForInnerElement)) {
                 Point start = new Point(Math.abs(marvinSegmentInnerElement.x1 - marvinSegment.x1),
                         Math.abs(marvinSegmentInnerElement.y1 - marvinSegment.y1));
                 Point end = new Point(Math.abs(marvinSegmentInnerElement.x2 - marvinSegmentInnerElement.x1),
@@ -146,21 +110,15 @@ public class SegmentationService {
     }
 
 
-    private boolean isIntersect(MarvinSegment marvinSegment, MarvinSegment marvinSegmentSecond, int[][] resizingVector, int[][] resingVectorSecond) {
-        if (!checkForAvailableArea(marvinSegment) || !checkForAvailableArea(marvinSegmentSecond))
+    private boolean isInnerIntersect(MarvinSegment marvinSegment, MarvinSegment marvinSegmentSecond, int[][] resizingVector, int[][] resizingVectorSecond) {
+        if (isAvailableArea(marvinSegment) || isAvailableArea(marvinSegmentSecond))
             return false;
 
-        if (!checkForEmptyArea(resizingVector) || !checkForEmptyArea(resingVectorSecond))
+        if (isEmptyArea(resizingVector) || isEmptyArea(resizingVectorSecond))
             return false;
 
-        Point pointAStart = new Point(marvinSegment.x1, marvinSegment.y1);
-        Point pointAEnd = new Point(marvinSegment.x2, marvinSegment.y2);
-        Point pointBStart = new Point(marvinSegmentSecond.x1, marvinSegmentSecond.y1);
-        Point pointBEnd = new Point(marvinSegmentSecond.x2, marvinSegmentSecond.y2);
-        return (intersection(pointAStart, pointBStart, pointBEnd) &&
-                intersection(pointAEnd, pointBStart, pointBEnd)) ||
-                (intersection(pointBStart, pointAStart, pointAEnd) &&
-                        intersection(pointBEnd, pointAStart, pointAEnd));
+        return innerIntersection(marvinSegment, marvinSegmentSecond) ||
+                innerIntersection(marvinSegmentSecond, marvinSegment);
     }
 
     private void filterGreen(MarvinImage image) {
@@ -175,44 +133,12 @@ public class SegmentationService {
         );
     }
 
-    private boolean checkForAvailableArea(MarvinSegment marvinSegment) {
-        return marvinSegment.area > THRESHOLD_FOR_AREA && marvinSegment.height > THRESHOLD_FOR_Y && marvinSegment.width > THRESHOLD_FOR_X;
-    }
-
     private void formResult(int[][] resizingVector, MarvinSegment segmentResult, MarvinImage loadImage) {
-        if (!checkForAvailableArea(segmentResult) || !checkForEmptyArea(resizingVector))
+        if (isAvailableArea(segmentResult) || isEmptyArea(resizingVector))
             return;
 
         HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = hieroglyphMapperService.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
         loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
-    }
-
-    private boolean checkForEmptyArea(int[][] vector) {
-        int height = vector.length;
-        int[] resultList = new int[height];
-        int thresholdHeight = Math.toIntExact(Math.round(height * 0.5));
-        IntStream.range(0, height).forEach(heightIndex ->
-                resultList[heightIndex] = Arrays.stream(vector[heightIndex]).max().getAsInt());
-
-        long cntEmptyElement = Arrays.stream(resultList).filter(element -> element == 0).count();
-        return cntEmptyElement < thresholdHeight;
-    }
-
-    private void saveResults(List<HieroglyphRecognitionModel> hieroglyphRecognitionModels) {
-        hieroglyphRecognitionModels.forEach(hieroglyphRecognitionModel -> {
-            try {
-                fileService.createImage(hieroglyphRecognitionModel.getBufferedImage(), hieroglyphRecognitionModel.getPath());
-            } catch (IOException e) {
-                log.warn("File already defined. Override existing.");
-            }
-        });
-    }
-
-    private boolean intersection(Point pointAStart, Point pointBStart, Point pointBEnd) {
-        return pointBStart.x <= pointAStart.x &&
-                pointAStart.x <= pointBEnd.x &&
-                pointBStart.y <= pointAStart.y &&
-                pointAStart.y <= pointBEnd.y;
     }
 }
