@@ -2,7 +2,7 @@ package MLP.controller;
 
 import MLP.exception.RecognitionException;
 import MLP.model.Translation;
-import MLP.services.RecognitionService;
+import MLP.service.RecognitionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

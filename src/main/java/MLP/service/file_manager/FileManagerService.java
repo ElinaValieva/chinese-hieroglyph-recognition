@@ -1,4 +1,4 @@
-package MLP.services.file_service;
+package MLP.service.file_manager;
 
 import MLP.configuration.AppProperty;
 import MLP.exception.ErrorCode;
@@ -36,11 +36,11 @@ public class FileManagerService implements FileService {
 
     @Override
     public String createImage(MultipartFile file) throws RecognitionException {
-        logger.debug("Try to save file {}", file.getOriginalFilename());
+        logger.debug("Try to save file_manager {}", file.getOriginalFilename());
         try (InputStream inputStream = file.getInputStream()) {
             Path path = getFileDirectory(file.getOriginalFilename());
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
-            logger.debug("Save file {}", file.getOriginalFilename());
+            logger.debug("Save file_manager {}", file.getOriginalFilename());
             return path.toUri().getPath();
         } catch (IOException e) {
             logger.error("", e);

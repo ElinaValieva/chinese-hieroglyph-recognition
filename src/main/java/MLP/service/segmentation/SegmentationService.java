@@ -1,11 +1,12 @@
-package MLP.services.segmentation;
+package MLP.service.segmentation;
 
 
 import MLP.exception.ErrorCode;
 import MLP.exception.RecognitionException;
 import MLP.model.HieroglyphRecognitionModel;
-import MLP.services.file_service.FileService;
-import MLP.services.image_service.ImageService;
+import MLP.service.file_manager.FileService;
+import MLP.service.image_manager.ImageService;
+import MLP.service.hieroglyph_mapper.HieroglyphMapperService;
 import lombok.extern.log4j.Log4j2;
 import marvin.color.MarvinColorModelConverter;
 import marvin.image.MarvinImage;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static MLP.services.segmentation.common.SegmentationConstants.*;
+import static MLP.service.segmentation.common.SegmentationConstants.*;
 import static marvinplugins.MarvinPluginCollection.floodfillSegmentation;
 import static marvinplugins.MarvinPluginCollection.morphologicalClosing;
 
@@ -37,19 +38,20 @@ public class SegmentationService {
 
     private final FileService fileService;
     private final ImageService imageService;
-
     private List<HieroglyphRecognitionModel> hieroglyphRecognitionModels;
+    private final HieroglyphMapperService hieroglyphMapperService;
 
     @Autowired
     public SegmentationService(FileService fileService,
-                               ImageService imageService) {
+                               ImageService imageService, HieroglyphMapperService hieroglyphMapperService) {
         this.fileService = fileService;
         this.imageService = imageService;
+        this.hieroglyphMapperService = hieroglyphMapperService;
     }
 
     public List<HieroglyphRecognitionModel> segment(String imagePath) throws RecognitionException, IOException {
         log.debug("Start segmenting process for image: {}", imagePath);
-        HieroglyphRecognitionModel hieroglyphRecognitionModel = imageService.mapToModel(imagePath);
+        HieroglyphRecognitionModel hieroglyphRecognitionModel = hieroglyphMapperService.mapToModel(imagePath);
         hieroglyphRecognitionModels = new ArrayList<>();
 
         MarvinImage loadImage = MarvinImageIO.loadImage(imagePath);
@@ -180,7 +182,7 @@ public class SegmentationService {
         if (!checkForAvailableArea(segmentResult) || !checkForEmptyArea(resizingVector))
             return;
 
-        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = imageService.mapToModel(resizingVector);
+        HieroglyphRecognitionModel hieroglyphResizingRecognitionModel = hieroglyphMapperService.mapToModel(resizingVector);
         hieroglyphRecognitionModels.add(hieroglyphResizingRecognitionModel);
         loadImage.drawRect(segmentResult.x1, segmentResult.y1, segmentResult.width, segmentResult.height, COLOR_SEGMENTS);
     }

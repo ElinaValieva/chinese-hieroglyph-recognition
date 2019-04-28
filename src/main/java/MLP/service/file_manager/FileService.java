@@ -1,4 +1,4 @@
-package MLP.services.file_service;
+package MLP.service.file_manager;
 
 import MLP.exception.RecognitionException;
 import org.springframework.web.multipart.MultipartFile;

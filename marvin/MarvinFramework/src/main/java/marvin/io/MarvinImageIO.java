@@ -11,18 +11,17 @@ https://groups.google.com/forum/#!forum/marvin-project
 
 package marvin.io;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
+import marvin.image.MarvinImage;
+import marvin.util.MarvinErrorHandler;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.event.IIOReadWarningListener;
 import javax.imageio.stream.ImageInputStream;
-
-import marvin.image.MarvinImage;
-import marvin.util.MarvinErrorHandler;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Methods to load and save images.
