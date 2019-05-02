@@ -17,6 +17,14 @@
  1. `JDK 1.8` at least - for running app
  2. `Maven 3+`            - for building package
 
+### Build and run with Docker :star:
+1. Clone the repository
+
+`git clone https://github.com/ElinaValieva/hieroglyph-recognition.git`
+
+2. In the location of `docker-compose.yml` execute the following
+
+`docker-compose up`
 
 ### Additional application
 ###  :secret:  [Hieroglyph Recognition Neural Network](https://github.com/ElinaValieva/hieroglyph-recognition-neural-network) 
