@@ -1,4 +1,6 @@
 FROM python:alpine3.7
-ADD HieroglyphController.py /
-RUN pip install flask
-CMD [ "python", "./HieroglyphController.py" ]
+FROM gw000/keras:2.1.4-py3-tf-cpu
+FROM tiangolo/uwsgi-nginx-flask:python3.7
+ADD controller/HieroglyphController.py /
+EXPOSE 8080
+CMD [ "python", "controller/HieroglyphController.py" ]
