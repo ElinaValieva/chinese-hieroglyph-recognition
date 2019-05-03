@@ -1,8 +1,6 @@
-import os
+import glob as global_util
 
 import numpy as np
-
-import glob as global_util
 from PIL import Image
 from keras.utils import np_utils
 
@@ -18,22 +16,25 @@ def get_categories_cnt():
 
 def generate_dataset(path, size):
     global cnt_categories, categories
-    directory = global_util.glob(path + '*.png')
+    loaded_path = '../' + path + '/'
+    directory = global_util.glob(loaded_path + "*/")
+    directory2 = global_util.glob(loaded_path + "*/*.png")
     counter = 1
     np_img = []
     for i in directory:
-        img = Image.open(str(i))
-        img = img.convert('L')
-        name = int(os.path.basename(i).replace('.png', ''))
-        categories.append(name)
-        if directory.index(i) == 0:
-            np_img = np.array(img, float)
-            continue
-        np_img = np.append(np_img, np.array(img, float), 0)
-        counter += 1
+        for j in global_util.glob(i + '*.png'):
+            img = Image.open(str(j))
+            img = img.convert('L')
+            name = int(i.replace(path, '').replace('\\', '').replace('../', ''))
+            categories.append(name)
+            if directory2.index(j) == 0:
+                np_img = np.array(img, float)
+                continue
+            np_img = np.append(np_img, np.array(img, float), 0)
+            counter += 1
     dataset = np_img.reshape(counter, 1, size, size)
     dataset /= 255
-    cnt_categories = counter
+    cnt_categories = max(categories) + 1
     return dataset
 
 
