@@ -1,0 +1,22 @@
+version: '2.1'
+services:
+  hieroglyph-recognition:
+    image: elliiinnnaaa/hieroglyph-recognition
+    container_name: hieroglyph-recognition
+    environment: 
+      NEURAL_NETWORK_URL: http://hieroglyph-recognition-nn:8080/
+    ports:
+      - "8095:8095"
+    healthcheck:
+      test: "exit 0"
+      
+  hieroglyph-recognition-nn:
+    image: elliiinnnaaa/hieroglyph-recognition-neural-network
+    container_name: hieroglyph-recognition-neural-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      hieroglyph-recognition:
+        condition: service_healthy
+    healthcheck:
+      test: "exit 0"
