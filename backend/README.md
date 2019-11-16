@@ -1,7 +1,7 @@
 # :secret: Hieroglyph Recognition
 > Service for Hieroglyph Recognition
 > 
-![enter image description here](https://github.com/ElinaValieva/chinese-hieroglyph-recognition/blob/master/ezgif.com-gif-maker%20(1).gif)
+![enter image description here](https://github.com/ElinaValieva/chinese-hieroglyph-recognition/blob/master/backend/simpleStructuteJPG.JPG)
 &nbsp;
 ### Technologies :hammer:
  - Spring Boot
