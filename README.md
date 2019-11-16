@@ -1,7 +1,7 @@
 # :secret: Hieroglyph Recognition
 > Service for Hieroglyph Recognition via chinese codes
 > 
-![enter image description here](https://lh3.googleusercontent.com/X54oGLdnlCTwnjVfo9KY5h0pd-7zRSRsB00qD9shvGRr6DCYHxQz72COxGgOPOP_XukEvRGKGA0)
+![enter image description here](https://github.com/ElinaValieva/chinese-hieroglyph-recognition/blob/master/ezgif.com-gif-maker%20(1).gif)
 &nbsp;
 ### Technologies :hammer:
  - Backend: 
